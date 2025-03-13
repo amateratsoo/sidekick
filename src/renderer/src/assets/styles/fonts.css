@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'inter-tight';
+  font-style: normal;
+  font-display: swap;
+  src: url('../fonts/inter/InterTight-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: 'inter-tight';
+  font-style: italic;
+  font-display: swap;
+  src: url('../fonts/inter/InterTight-Italic-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: 'instrument-serif';
+  font-style: normal;
+  font-display: swap;
+  src: url('../fonts//instrument-serif/InstrumentSerif-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'instrument-serif';
+  font-style: italic;
+  font-display: swap;
+  src: url('../fonts//instrument-serif/InstrumentSerif-Italic.ttf');
+}

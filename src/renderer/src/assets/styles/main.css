@@ -1,0 +1,38 @@
+@import './fonts.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'inter-tight';
+  --font-serif: 'instrument-serif';
+}
+
+:root {
+  --scrollbar-color: transparent;
+}
+
+/* .custom-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-color) transparent;
+    scrollbar-gutter: auto;
+  }
+} */
+
+.custom-scrollbar {
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
+  @apply rounded-full;
+}
