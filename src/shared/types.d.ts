@@ -1,4 +1,9 @@
-import type { InsertableHabit, SelectableHabit } from 'src/main/database/schema'
+import type {
+  InsertableHabit,
+  SelectableHabit,
+  SelectableTask,
+  InsertableTask
+} from 'src/main/database/schema'
 
 export interface Api {
   db: {
@@ -9,4 +14,4 @@ export interface Api {
   }
 }
 
-export type { InsertableHabit, SelectableHabit }
+export type { InsertableHabit, SelectableHabit, InsertableTask, SelectableTask }

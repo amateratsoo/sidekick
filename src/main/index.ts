@@ -19,7 +19,7 @@ function createWindow(): void {
     frame: true,
     center: true,
     backgroundColor: `rgba(9, 9, 11, ${blurred_window ? 0.6 : 1})`,
-    title: 'Memento Mori',
+    title: 'Sidekick',
     // for mac blur effect
     ...(blurred_window ? { vibrancy: 'under-window' } : {}),
     visualEffectState: 'active',
@@ -32,7 +32,7 @@ function createWindow(): void {
     // ****
     titleBarStyle: process.platform == 'darwin' ? 'hidden' : 'default',
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    ...(process.platform === 'linux' || process.platform === 'win32' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -72,7 +72,6 @@ app.whenReady().then(() => {
   })
 
   // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
   ipcMain.handle('db:habit:find-all', async () => await db.habit.findAll())
   ipcMain.handle('db:habit:create-habit', async (_, args: InsertableHabit) =>
     db.habit.createHabit(args)

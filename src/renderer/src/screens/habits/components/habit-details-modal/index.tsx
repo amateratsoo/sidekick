@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { ScrollArea } from '@renderer/components/scroll-area'
 import { cn } from '@renderer/utils'
 import { Modal } from '@renderer/components/modal'
-import type { SelectableHabit } from '@shared/types'
+import type { SelectableHabit, SelectableTask } from '@shared/types'
 import { getAllDaysOfTheYear } from '@renderer/utils/get-all-days-of-the-year'
 
 interface Props extends SelectableHabit {
@@ -13,6 +13,41 @@ interface Props extends SelectableHabit {
 }
 
 const allDaysOfTheYear = getAllDaysOfTheYear()
+
+const tasks: SelectableTask[] = [
+  {
+    id: crypto.randomUUID(),
+    created_at: new Date(),
+    description: undefined,
+    habit_id: '',
+    is_completed: true,
+    name: 'arrumar o quarto'
+  },
+  {
+    id: crypto.randomUUID(),
+    created_at: new Date(),
+    description: 'lavar bem a cara',
+    habit_id: '',
+    is_completed: true,
+    name: 'fazer a rotina de skincare'
+  },
+  {
+    id: crypto.randomUUID(),
+    created_at: new Date(),
+    description: 'quanto mais cedo melhor',
+    habit_id: '',
+    is_completed: false,
+    name: 'estudar para os testes'
+  },
+  {
+    id: crypto.randomUUID(),
+    created_at: new Date(),
+    description: 'vamos ver a atualização nº 6 e preparar a reunião',
+    habit_id: '',
+    is_completed: true,
+    name: 'preparar a adoração em família'
+  }
+]
 
 export function HabitDetailsModal({
   badge,
@@ -33,7 +68,7 @@ export function HabitDetailsModal({
       open={open}
       onOpenChange={onOpenChange}
       trigger={null}
-      className="h-[50rem]"
+      className="h-[50rem] text-zinc-300"
       scrollAreaClassName="overflow-x-hidden"
     >
       <header className="w-full -mt-6 flex items-center gap-2">
@@ -109,7 +144,9 @@ export function HabitDetailsModal({
                               key={`${day}-${monthIndex}-${dayIndex}`}
                               className={cn('size-5 mx-auto rounded-md bg-zinc-900', {
                                 'ring-2 ring-zinc-800':
-                                  day == dayjs().date() && monthIndex == dayjs().month(),
+                                  day == dayjs().date() &&
+                                  monthIndex == dayjs().month() &&
+                                  dMonthIndex == 1,
                                 'opacity-40': dMonthIndex == 0
                               })}
                             />
@@ -139,6 +176,62 @@ export function HabitDetailsModal({
             </div>
           )}
         </ScrollArea>
+
+        {/* <div>
+          <h3>Desde 22/03/2024</h3>
+        </div> */}
+
+        <div>
+          <h2 className="text-zinc-300 font-sans font-semibold text-xl mb-4">Tarefas</h2>
+          <div>
+            {tasks.map((task) => {
+              return (
+                <div
+                  key={task.id}
+                  className={cn('flex items-center justify-between', {
+                    'opacity-25': task.is_completed
+                  })}
+                >
+                  <div
+                    className="border-l-4 text-base p-2 bg-zinc-950 my-2 text-zinc-300 rounded-md"
+                    style={{ borderColor: color }}
+                  >
+                    <span className="relative">
+                      <p
+                        className={cn(
+                          'text-zinc-500 font-serif text-xl font-semibold mb-1 inline-block',
+                          {
+                            '': task.is_completed == true
+                          }
+                        )}
+                      >
+                        {task.name}
+                      </p>
+
+                      {task.is_completed && (
+                        <div className="absolute w-full bg-zinc-300 h-px top-1/2 -translate-y-1/2" />
+                      )}
+                    </span>
+                    <div>
+                      <p className="text-zinc-300">{task.description}</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <input
+                      type="checkbox"
+                      className="size-6 rounded-md bg-zinc-900"
+                      checked={task.is_completed}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+            <button className="rounded-lg p-2 cursor-pointer text-center w-full border-dashed border-2 border-zinc-500/30 text-zinc-500/50 transition-transform active:scale-95 text-sm mt-4">
+              adicionar nova tarefa 🪄
+            </button>
+          </div>
+        </div>
       </div>
     </Modal>
   )

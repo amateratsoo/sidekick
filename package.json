@@ -1,9 +1,9 @@
 {
-  "name": "memento-mori",
+  "name": "sidekick",
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "https://github.com/amateratsoo",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",
@@ -15,7 +15,8 @@
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "rebuild": "electron-rebuild -f -w better-sqlite3",
+    "rebuild2": "node_modules\\.bin\\electron-rebuild.cmd -f -m .\\node_modules\\better-sqlite3",
+    "rebuild": "electron-rebuild -f -w better-sqlit3",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
@@ -51,6 +52,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8",
+    "electron-rebuild": "^3.2.9",
     "electron-vite": "^3.0.0",
     "eslint": "^9.20.1",
     "eslint-plugin-react": "^7.37.4",
@@ -72,8 +74,10 @@
     "onlyBuiltDependencies": [
       "better-sqlite3",
       "electron",
-      "esbuild"
+      "esbuild",
+      "lzma-native"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.6.3+sha512.bb45e34d50a9a76e858a95837301bfb6bd6d35aea2c5d52094fa497a467c43f5c440103ce2511e9e0a2f89c3d6071baac3358fc68ac6fb75e2ceb3d2736065e6"
 }
 

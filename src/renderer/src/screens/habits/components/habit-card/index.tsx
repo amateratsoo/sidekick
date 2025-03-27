@@ -45,7 +45,7 @@ export function HabitCard({ name, badge }: SelectableHabit): JSX.Element {
               <div
                 key={`${day}-${monthIndex}-${dayIndex}`}
                 className={cn('size-5 mx-auto rounded-md bg-zinc-900', {
-                  'ring-2 ring-zinc-800': day == dayjs().date(),
+                  'ring-2 ring-zinc-800': day == dayjs().date() && monthIndex == 1,
                   'opacity-40': monthIndex == 0
                 })}
               />

@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: memento-mori
+productName: sidekick
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: memento-mori
+  executableName: sidekick
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
