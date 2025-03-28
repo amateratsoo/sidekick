@@ -16,7 +16,7 @@ function createWindow(): void {
     height: 670,
     show: false,
     fullscreenable: true,
-    frame: true,
+    frame: false,
     center: true,
     backgroundColor: `rgba(9, 9, 11, ${blurred_window ? 0.6 : 1})`,
     title: 'Sidekick',
@@ -71,11 +71,25 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+  const currentWindow = BrowserWindow.getFocusedWindow()
+
   // IPC test
   ipcMain.handle('db:habit:find-all', async () => await db.habit.findAll())
-  ipcMain.handle('db:habit:create-habit', async (_, args: InsertableHabit) =>
-    db.habit.createHabit(args)
+  ipcMain.handle(
+    'db:habit:create-habit',
+    async (_, args: InsertableHabit) => await db.habit.createHabit(args)
   )
+  ipcMain.handle('window:close', () => currentWindow?.close())
+  ipcMain.handle('window:maximize', () => {
+    if (currentWindow?.isMaximized()) {
+      currentWindow.unmaximize()
+
+      return
+    }
+
+    currentWindow?.maximize()
+  })
+  ipcMain.handle('window:minimize', () => currentWindow?.minimize())
 
   createWindow()
 

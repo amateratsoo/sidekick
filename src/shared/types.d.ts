@@ -12,6 +12,11 @@ export interface Api {
       findAll: () => Promise<SelectableHabit[]>
     }
   }
+  window: {
+    maximize: () => void
+    minimize: () => void
+    close: () => void
+  }
 }
 
 export type { InsertableHabit, SelectableHabit, InsertableTask, SelectableTask }

@@ -30,8 +30,8 @@ export function Habits(): JSX.Element {
   }
 
   return (
-    <main className="w-screen h-screen">
-      <div className={cn('w-screen flex items-center justify-between py-4 px-6')}>
+    <main className="w-full h-full">
+      <div className={cn('w-full flex items-center justify-between py-4 px-6')}>
         <h1 className={cn('text-4xl font-bold font-serif italic text-zinc-300')}>Seus hábitos</h1>
 
         <CreateHabitModal />
@@ -53,7 +53,7 @@ export function Habits(): JSX.Element {
         ))}
       </div>
 
-      <HabitDetailsModal open={openModal} onOpenChange={setOpenModal} {...habitDetails.current} />
+      <HabitDetailsModal open={openModal} onOpenChange={setOpenModal} {...habitDetails.current!} />
     </main>
   )
 }

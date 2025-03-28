@@ -10,6 +10,10 @@
   --scrollbar-color: transparent;
 }
 
+html {
+  overflow: hidden;
+}
+
 /* .custom-scrollbar::-webkit-scrollbar-button {
   display: none;
 }
@@ -21,9 +25,6 @@
     scrollbar-gutter: auto;
   }
 } */
-
-.custom-scrollbar {
-}
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 10px;
