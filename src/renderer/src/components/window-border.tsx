@@ -1,5 +1,4 @@
 import { type ReactNode, useState } from 'react'
-import { ViewVerticalIcon } from '@radix-ui/react-icons'
 import { cn } from '@renderer/utils'
 
 interface Props {
@@ -36,7 +35,7 @@ export function WindowBorder({ children }: Props) {
   return (
     <div className="w-screen h-screen grid grid-cols-[auto_1fr]">
       <aside
-        className={cn('w-56 bg-zinc-900', {
+        className={cn('w-60 bg-zinc-900', {
           'w-0': !showSidebar
         })}
       >
@@ -50,16 +49,11 @@ export function WindowBorder({ children }: Props) {
           onMouseEnter={() => setShowTitleBar(true)}
           onMouseLeave={() => setShowTitleBar(false)}
         ></div>
-        sidebar
       </aside>
       <main
-        className={cn(`bg-zinc-900 w-full h-screen relative p-[0.4rem]`, {
+        className={cn('bg-zinc-900 w-full h-screen relative p-[0.4rem] @container', {
           'pt-8': showTitleBar
         })}
-        // style={{
-        //   padding: `${borderPaddingInRem}rem`,
-        //   paddingTop: showTitleBar ? '2rem' : `${borderPaddingInRem}rem`
-        // }}
       >
         {/* <div
         className="absolute top-0 left-0 w-full bg-transparent [-webkit-app-region:drag]"
@@ -76,9 +70,6 @@ export function WindowBorder({ children }: Props) {
           )}
           onMouseEnter={() => setShowTitleBar(true)}
           onMouseLeave={() => setShowTitleBar(false)}
-          // style={{
-          //   height: showTitleBar ? '2rem' : `${borderPaddingInRem}rem`
-          // }}
         >
           {showTitleBar && (
             <>
@@ -86,7 +77,6 @@ export function WindowBorder({ children }: Props) {
                 className="rounded-md p-1 cursor-pointer hover:bg-zinc-800"
                 onClick={toggleSidebar}
               >
-                {/* <ViewVerticalIcon className="" /> */}
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -110,7 +100,7 @@ export function WindowBorder({ children }: Props) {
                 {windowButtons.map(({ name, action }) => {
                   return (
                     <div
-                      id={name}
+                      key={name}
                       onClick={action}
                       className={cn(`rounded-full size-4 bg-zinc-800`, {
                         'hover:bg-red-500': name == 'close',

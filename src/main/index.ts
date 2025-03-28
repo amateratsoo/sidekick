@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, BaseWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -9,9 +9,11 @@ import { InsertableHabit } from '@shared/types'
 // feature flags
 const blurred_window = false
 
+let mainWindow: BrowserWindow | null = null
+
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
@@ -40,7 +42,7 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow?.show()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -71,25 +73,23 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  const currentWindow = BrowserWindow.getFocusedWindow()
-
   // IPC test
   ipcMain.handle('db:habit:find-all', async () => await db.habit.findAll())
   ipcMain.handle(
     'db:habit:create-habit',
     async (_, args: InsertableHabit) => await db.habit.createHabit(args)
   )
-  ipcMain.handle('window:close', () => currentWindow?.close())
+  ipcMain.handle('window:close', () => mainWindow?.close())
   ipcMain.handle('window:maximize', () => {
-    if (currentWindow?.isMaximized()) {
-      currentWindow.unmaximize()
+    if (mainWindow?.isMaximized()) {
+      mainWindow.unmaximize()
 
       return
     }
 
-    currentWindow?.maximize()
+    mainWindow?.maximize()
   })
-  ipcMain.handle('window:minimize', () => currentWindow?.minimize())
+  ipcMain.handle('window:minimize', () => mainWindow?.minimize())
 
   createWindow()
 
