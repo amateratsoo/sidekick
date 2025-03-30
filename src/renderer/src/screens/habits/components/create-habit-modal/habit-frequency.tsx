@@ -1,24 +1,36 @@
+import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { cn } from '@renderer/utils'
 
 interface Props {
   habitsWeekdays: string[]
   setHabitsWeekdays: (state: React.SetStateAction<string[]>) => void
+  showError: boolean
+  setShowError: (state: boolean) => void
 }
 
 const weekdays = ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo']
 
-export function HabitFrequency({ habitsWeekdays, setHabitsWeekdays }: Props): JSX.Element {
+export function HabitFrequency({
+  habitsWeekdays,
+  setHabitsWeekdays,
+  showError,
+  setShowError
+}: Props): JSX.Element {
   return (
     <div className="mt-5">
       <label htmlFor="" className="text-lg text-zinc-500/40">
         Frequência
       </label>
-      <div className="mt-3 flex flex-wrap gap-1.5">
+      <div className="mt-3 flex flex-wrap gap-1">
         {weekdays.map((weekday) => {
           return (
             <button
               type="button"
               onClick={() => {
+                if (showError) {
+                  setShowError(false)
+                }
+
                 if (habitsWeekdays.includes(weekday)) {
                   setHabitsWeekdays((prev) => prev.filter((w) => w != weekday))
                   return
@@ -38,6 +50,13 @@ export function HabitFrequency({ habitsWeekdays, setHabitsWeekdays }: Props): JS
           )
         })}
       </div>
+
+      {showError && (
+        <span className="flex gap-1 text-red-500 text-sm items-center mt-2">
+          {' '}
+          <InfoCircledIcon /> {'hey! precisa escolher ao menos um dia na semana'}
+        </span>
+      )}
     </div>
   )
 }

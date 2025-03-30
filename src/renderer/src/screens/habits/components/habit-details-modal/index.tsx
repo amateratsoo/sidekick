@@ -221,7 +221,7 @@ export function HabitDetailsModal({
                     <input
                       type="checkbox"
                       className="size-6 rounded-md bg-zinc-900"
-                      checked={task.is_completed}
+                      defaultChecked={task.is_completed}
                     />
                   </div>
                 </div>

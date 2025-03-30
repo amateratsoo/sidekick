@@ -39,7 +39,7 @@ export function Habits(): JSX.Element {
 
       <div
         className={cn(
-          'px-6 pb-6 gap-2.5 grid-cols-1 grid @xl:grid-cols-2 @2xl:grid-cols-3 @5xl:grid-cols-4 @min-[77rem]:grid-cols-5'
+          'px-6 pb-6 gap-2.5 grid-cols-1 grid @lg:grid-cols-2 @2xl:grid-cols-3 @5xl:grid-cols-4 @6xl:grid-cols-5'
         )}
       >
         {habits.map((props) => (

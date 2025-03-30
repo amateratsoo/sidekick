@@ -9,6 +9,7 @@ import { useSetAtom } from 'jotai'
 import { HabitFrequency } from './habit-frequency'
 import { HabitBadge } from './habit-badge'
 import { HabitColor } from './habit-color'
+import { Input } from '@renderer/components/input'
 
 const { db } = window.api
 
@@ -17,9 +18,11 @@ export function CreateHabitModal(): JSX.Element {
   const [currentBadge, setCurrentBadge] = useState<string | undefined>(undefined)
   const [currentColor, setCurrentColor] = useState<string | undefined>(undefined)
   const [showAllColors, setShowAllColors] = useState(false)
-  const [showAllEmojis, setShowAllEmojis] = useState(false)
 
   const [openModal, setOpenModal] = useState(false)
+
+  const [showNameError, setShowNameError] = useState(false)
+  const [showWeekdayError, setShowWeekdayError] = useState(false)
 
   const habits = useSetAtom(habitsAtom)
 
@@ -28,8 +31,9 @@ export function CreateHabitModal(): JSX.Element {
       setCurrentBadge('')
       setCurrentColor('')
       setHabitsWeekdays([])
+      setShowWeekdayError(false)
       setShowAllColors(false)
-      setShowAllEmojis(false)
+      setShowNameError(false)
     }
   }, [openModal])
 
@@ -42,7 +46,17 @@ export function CreateHabitModal(): JSX.Element {
       // habitDescription.value.length > 0 ? habitDescription.value.trim() : undefined
     ]
 
-    if (!name || habitsWeekdays.length == 0) return
+    if (!name || habitsWeekdays.length == 0) {
+      if (!name) {
+        setShowNameError(true)
+      }
+
+      if (habitsWeekdays.length == 0) {
+        setShowWeekdayError(true)
+      }
+
+      return
+    }
 
     const data = {
       id: crypto.randomUUID(),
@@ -53,6 +67,14 @@ export function CreateHabitModal(): JSX.Element {
       badge: currentBadge || '💪',
       color: currentColor || (c.blue[500] as string)
     }
+
+    /** 
+      TODO: handle erros, like if couldn't create a habit 
+      and display error messages for things, for example
+      a habit needs to have the day of the week provided
+      rn the user does not receive feedback if he
+      does not provide it
+    */
 
     const habit = await db.habit.createHabit(data)
 
@@ -81,12 +103,14 @@ export function CreateHabitModal(): JSX.Element {
           <label htmlFor="habit-name" className="text-lg text-zinc-500/40">
             Nome do hábito
           </label>
-          <input
+          <Input
+            errorMessage="opa! esqueceu de dar um nome ao seu hábito"
+            showError={showNameError}
+            setShowError={setShowNameError}
             name="habit-name"
             id="habit-name"
             type="text"
             placeholder="Eu vou..."
-            className="block bg-zinc-900/15 py-3 pl-2.5 ring-1 ring-zinc-800 text-zinc-300 outline-none focus-within:ring-zinc-300 rounded-md w-full mt-3"
           />
         </div>
 
@@ -94,22 +118,21 @@ export function CreateHabitModal(): JSX.Element {
           <label htmlFor="description" className="text-lg text-zinc-500/40">
             Descrição
           </label>
-          <input
+          <Input
             name="description"
             id="description"
             type="text"
             placeholder="Vou fazer isso porque quero..."
-            className="block bg-zinc-900/15 py-3 pl-2.5 ring-1 ring-zinc-800 text-zinc-300 outline-none focus-within:ring-zinc-300 rounded-md w-full mt-3"
           />
         </div>
 
-        <HabitFrequency habitsWeekdays={habitsWeekdays} setHabitsWeekdays={setHabitsWeekdays} />
-        <HabitBadge
-          currentBadge={currentBadge}
-          setCurrentBadge={setCurrentBadge}
-          showAllEmojis={showAllEmojis}
-          setShowAllEmojis={setShowAllEmojis}
+        <HabitFrequency
+          setShowError={setShowWeekdayError}
+          showError={showWeekdayError}
+          habitsWeekdays={habitsWeekdays}
+          setHabitsWeekdays={setHabitsWeekdays}
         />
+        <HabitBadge currentBadge={currentBadge} setCurrentBadge={setCurrentBadge} />
         <HabitColor
           currentColor={currentColor}
           setCurrentColor={setCurrentColor}
