@@ -30,13 +30,13 @@ interface TaskTable {
   created_at: ColumnType<Date, string | undefined, never>
 }
 
-interface JournalTable {
-  id: string
-  title: string
-  content: string | undefined
-  habit_id: string
-  created_at: ColumnType<Date, string | undefined, never>
-}
+// interface JournalTable {
+//   id: string
+//   title: string
+//   content: string | undefined
+//   habit_id: string
+//   created_at: ColumnType<Date, string | undefined, never>
+// }
 
 interface CompletedDateTable {
   id: string
@@ -50,7 +50,9 @@ interface Habit_CompletedDate_Table {
   created_at: ColumnType<Date, string | undefined, never>
 }
 
-export type SelectableHabit = Selectable<HabitTable>
+export type SelectableHabit = {
+  tasks?: SelectableTask[]
+} & Selectable<HabitTable>
 export type InsertableHabit = Insertable<HabitTable>
 export type UpdateableHabit = Updateable<HabitTable>
 
@@ -58,9 +60,9 @@ export type SelectableTask = Selectable<TaskTable>
 export type InsertableTask = Insertable<TaskTable>
 export type UpdateableTask = Updateable<TaskTable>
 
-export type SelectableJournal = Selectable<JournalTable>
-export type InsertableJournal = Insertable<JournalTable>
-export type UpdateableJournal = Updateable<JournalTable>
+// export type SelectableJournal = Selectable<JournalTable>
+// export type InsertableJournal = Insertable<JournalTable>
+// export type UpdateableJournal = Updateable<JournalTable>
 
 export type SelectableCompletedDate = Selectable<CompletedDateTable>
 export type InsertableCompletedDate = Insertable<CompletedDateTable>

@@ -1,3 +1,5 @@
+import { jsonArrayFrom } from 'kysely/helpers/sqlite'
+
 import { db } from '../db'
 import type { InsertableHabit, SelectableHabit, UpdateableHabit } from '../schema'
 import { generateUUID } from '../../../shared/constants'
@@ -29,7 +31,26 @@ export async function createHabit({
 }
 
 export async function findAll(): Promise<SelectableHabit[]> {
-  return await db.selectFrom('habit').selectAll().execute()
+  return await db
+    .selectFrom('habit')
+    .selectAll()
+    .select((eb) => [
+      // tasks
+      jsonArrayFrom(
+        eb
+          .selectFrom('task')
+          .select([
+            'task.id',
+            'task.name',
+            'task.is_completed',
+            'task.habit_id',
+            'task.description',
+            'task.created_at'
+          ])
+          .whereRef('task.habit_id', '=', 'habit.id')
+      ).as('tasks')
+    ])
+    .execute()
 }
 
 export async function deleteHabitById(id: string): Promise<void> {

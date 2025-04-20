@@ -1,6 +1,6 @@
-import { Router } from './components/router'
-import { ScrollArea } from './components/scroll-area'
-import { WindowBorder } from './components/window-border'
+import { Router } from './components/ui'
+import { ScrollArea } from './components/ui'
+import { WindowBorder } from './components/ui'
 
 function App(): JSX.Element {
   return (

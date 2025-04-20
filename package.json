@@ -78,6 +78,7 @@
       "electron",
       "esbuild",
       "lzma-native",
+      "sqlite3",
       "win-mouse"
     ]
   },

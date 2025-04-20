@@ -1,6 +1,6 @@
 import path from 'node:path'
 import fs from 'node:fs/promises'
-import { homedir } from 'os'
+import { homedir } from 'node:os'
 import { randomUUID, type UUID } from 'node:crypto'
 
 const pathToDb = path.join(homedir(), 'sidekick', 'dev.db')
