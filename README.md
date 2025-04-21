@@ -1,4 +1,4 @@
-<img src="public/preview.png" style="border-radius: 8px" />
+<img src="public/preview-2x.png" style="border-radius: 8px" />
 
 <br />
 
