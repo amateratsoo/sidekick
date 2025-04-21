@@ -1,34 +1,62 @@
-# sidekick
+<img src="public/preview.png" style="border-radius: 8px" />
 
-An Electron application with React and TypeScript
+<br />
 
-## Recommended IDE Setup
+<h1> Sidekick <img src='./resources/Icon5.png' width=28 /> </h1>
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+<p align="center">
+🚀 <b>Modern</b>, ⚡ <b>Sleek</b>, and 🪄 <b>Fully Customizable</b> habit tracker and calendar — designed to keep you productive without getting in your way.
+</p>
 
-## Project Setup
+<p align="center">
+  <a href="#-built-with">Built with</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-getting-started">Getting started</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-development">Development</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-build-instructions">Build instructions</a>
+</p>
 
-### Install
+## 🪄Built with
 
-```bash
-$ pnpm install
+This project is built using:
+
+- [Electron.js](https://www.electronjs.org/) — for building cross-platform desktop apps
+- [React](https://react.dev/) — for building the UI
+- [Vite](https://vitejs.dev/) — fast and modern frontend tooling
+- [Tailwind CSS](https://tailwindcss.com/) — utility-first CSS framework
+- [SQLite](https://www.sqlite.org/index.html) — lightweight and fast embedded database
+- [Kysely](https://kysely.dev/) — type-safe SQL query builder for TypeScript
+
+## 📦 Getting started
+
+> 💡good to know: the project is interface is all in portuguese
+
+Make sure you have [pnpm](https://pnpm.io/) installed.
+
+Clone the repo and install dependencies:
+
+```sh
+git clone <repo-url>
+cd <repo-folder>
+pnpm install
+pnpm dev
 ```
 
-### Development
+## Development
 
-```bash
-$ pnpm dev
+```sh
+pnpm dev
 ```
 
-### Build
+## Build instructions
 
-```bash
-# For windows
-$ pnpm build:win
+### Mac
 
-# For macOS
-$ pnpm build:mac
+```sh
+pnpm build:mac
+```
 
-# For Linux
-$ pnpm build:linux
+### Linux
+
+```sh
+pnpm build:linux
 ```
