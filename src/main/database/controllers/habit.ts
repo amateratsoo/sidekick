@@ -31,7 +31,7 @@ export async function createHabit({
 }
 
 export async function findAll(): Promise<SelectableHabit[]> {
-  return await db
+  const query = await db
     .selectFrom('habit')
     .selectAll()
     .select((eb) => [
@@ -51,6 +51,18 @@ export async function findAll(): Promise<SelectableHabit[]> {
       ).as('tasks')
     ])
     .execute()
+
+  /* 
+    kysely relations recipe returns children as text
+    and not json, so we need to do parse the and return
+    each one of the children 
+  */
+  return query.map((row) => {
+    return {
+      ...row,
+      tasks: JSON.parse(String(row.tasks))
+    }
+  })
 }
 
 export async function deleteHabitById(id: string): Promise<void> {

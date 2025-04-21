@@ -1,10 +1,10 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, ipcMain, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon5.png?asset'
 
 import { db } from './database/controllers'
-import { InsertableHabit } from '@shared/types'
+import { InsertableHabit, InsertableTask } from '@shared/types'
 
 // feature flags
 const blurred_window = false
@@ -73,12 +73,19 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
+  // IPC
+  // db endpoints
   ipcMain.handle('db:habit:find-all', async () => await db.habit.findAll())
   ipcMain.handle(
     'db:habit:create-habit',
     async (_, args: InsertableHabit) => await db.habit.createHabit(args)
   )
+  ipcMain.handle(
+    'db:task:create-task',
+    async (_, args: InsertableTask) => await db.task.createTask(args)
+  )
+
+  // window title bar buttons
   ipcMain.handle('window:close', () => mainWindow?.close())
   ipcMain.handle('window:maximize', () => {
     if (mainWindow?.isMaximized()) {

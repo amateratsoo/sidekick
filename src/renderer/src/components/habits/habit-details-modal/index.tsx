@@ -1,11 +1,11 @@
-import { type SetStateAction, useState } from 'react'
+import { type SetStateAction, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 
 import { ScrollArea, Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
 import { TaskCard } from './task-card'
 
-import type { SelectableHabit, SelectableTask } from '@shared/types'
+import type { InsertableTask, SelectableHabit, SelectableTask } from '@shared/types'
 
 import { getAllDaysOfTheYear } from '@renderer/utils/get-all-days-of-the-year'
 
@@ -25,13 +25,26 @@ export function HabitDetailsModal({
   id,
   name,
   streak,
-  tasks = [],
+  tasks: t = [],
   open,
   onOpenChange
 }: Props): JSX.Element {
   const [completionGraphMode, setCompletionGraphMode] = useState<'yearly' | 'monthly'>('monthly')
+  const [tasks, setTasks] = useState(t)
 
-  function addNewTask() {}
+  useEffect(() => {
+    return () => setTasks([])
+  }, [])
+
+  const { db } = window.api
+
+  async function createTask() {
+    const task = await db.task.createTask({
+      habit_id: id
+    })
+
+    setTasks((prev) => [...prev, task])
+  }
 
   return (
     <Modal
@@ -159,7 +172,7 @@ export function HabitDetailsModal({
             })}
             <button
               className="rounded-lg p-2 cursor-pointer text-center w-full border-dashed border-2 border-zinc-500/30 text-zinc-500/50 transition-transform active:scale-95 text-sm mt-4"
-              onClick={addNewTask}
+              onClick={createTask}
             >
               adicionar nova tarefa 🪄
             </button>

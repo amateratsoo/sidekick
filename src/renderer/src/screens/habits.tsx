@@ -23,14 +23,7 @@ export function Habits(): JSX.Element {
   }, [])
 
   function openHabitDetailsModal(props: SelectableHabit): void {
-    habitDetails.current = {
-      ...props,
-      /* 
-        kysely relation thingy returns children as text
-        and not json, so we need to do this hacky thing 
-      */
-      tasks: JSON.parse(String(props.tasks))
-    }
+    habitDetails.current = props
     console.log(habitDetails.current)
 
     setOpenModal(true)
@@ -55,7 +48,7 @@ export function Habits(): JSX.Element {
             key={props.id}
             className="cursor-pointer"
           >
-            <HabitCard {...props} key={props.id} />
+            <HabitCard {...props} />
           </button>
         ))}
       </div>

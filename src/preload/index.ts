@@ -9,6 +9,9 @@ export const api: Api = {
     habit: {
       findAll: () => ipcRenderer.invoke('db:habit:find-all'),
       createHabit: (args) => ipcRenderer.invoke('db:habit:create-habit', args)
+    },
+    task: {
+      createTask: (args) => ipcRenderer.invoke('db:task:create-task', args)
     }
   },
   window: {

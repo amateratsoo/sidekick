@@ -11,6 +11,9 @@ export interface Api {
       createHabit: (args: InsertableHabit) => Promise<SelectableHabit>
       findAll: () => Promise<SelectableHabit[]>
     }
+    task: {
+      createTask: (args: InsertableTask) => Promise<SelectableTask>
+    }
   }
   window: {
     maximize: () => void

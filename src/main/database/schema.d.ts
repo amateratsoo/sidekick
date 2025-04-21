@@ -22,10 +22,10 @@ export interface HabitTable {
 }
 
 interface TaskTable {
-  id: string
-  name: string
+  id: ColumnType<string, string | undefined, never>
+  name: string | undefined
   description: string | undefined
-  is_completed: boolean
+  is_completed?: ColumnType<boolean, 0 | 1 | boolean>
   habit_id: string
   created_at: ColumnType<Date, string | undefined, never>
 }
@@ -50,9 +50,9 @@ interface Habit_CompletedDate_Table {
   created_at: ColumnType<Date, string | undefined, never>
 }
 
-export type SelectableHabit = {
+export interface SelectableHabit extends Selectable<HabitTable> {
   tasks?: SelectableTask[]
-} & Selectable<HabitTable>
+}
 export type InsertableHabit = Insertable<HabitTable>
 export type UpdateableHabit = Updateable<HabitTable>
 
