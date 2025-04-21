@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <a href="#-built-with">Built with</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#built-with">Built with</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-getting-started">Getting started</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-development">Development</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-build-instructions">Build instructions</a>
+  <a href="#development">Development</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#build-instructions">Build instructions</a>
 </p>
 
 ## 🪄Built with
@@ -28,7 +28,7 @@ This project is built using:
 
 ## 📦 Getting started
 
-> 💡good to know: the project is interface is all in portuguese
+> 💡good to know: the project interface is all in portuguese
 
 Make sure you have [pnpm](https://pnpm.io/) installed.
 

@@ -53,7 +53,12 @@ export function Habits(): JSX.Element {
         ))}
       </div>
 
-      <HabitDetailsModal open={openModal} onOpenChange={setOpenModal} {...habitDetails.current!} />
+      <HabitDetailsModal
+        open={openModal}
+        onOpenChange={setOpenModal}
+        {...habitDetails.current!}
+        // key={habitDetails.current?.id}
+      />
     </main>
   )
 }

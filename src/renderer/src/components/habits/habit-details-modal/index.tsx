@@ -33,8 +33,8 @@ export function HabitDetailsModal({
   const [tasks, setTasks] = useState(t)
 
   useEffect(() => {
-    return () => setTasks([])
-  }, [])
+    setTasks(t)
+  }, [t])
 
   const { db } = window.api
 

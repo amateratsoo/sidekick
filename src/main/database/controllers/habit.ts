@@ -1,7 +1,7 @@
 import { jsonArrayFrom } from 'kysely/helpers/sqlite'
 
 import { db } from '../db'
-import type { InsertableHabit, SelectableHabit, UpdateableHabit } from '../schema'
+import type { InsertableHabit, SelectableHabit, SelectableTask, UpdateableHabit } from '../schema'
 import { generateUUID } from '../../../shared/constants'
 
 export async function createHabit({
@@ -60,7 +60,12 @@ export async function findAll(): Promise<SelectableHabit[]> {
   return query.map((row) => {
     return {
       ...row,
-      tasks: JSON.parse(String(row.tasks))
+      tasks: JSON.parse(String(row.tasks)).map((task: SelectableTask) => {
+        return {
+          ...task,
+          is_completed: !!task.is_completed
+        }
+      }) as SelectableTask[]
     }
   })
 }
