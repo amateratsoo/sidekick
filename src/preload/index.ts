@@ -11,7 +11,8 @@ export const api: Api = {
       createHabit: (args) => ipcRenderer.invoke('db:habit:create-habit', args)
     },
     task: {
-      createTask: (args) => ipcRenderer.invoke('db:task:create-task', args)
+      createTask: (args) => ipcRenderer.invoke('db:task:create-task', args),
+      findAllByHabitId: (args) => ipcRenderer.invoke('db:task:find-all-by-habit-id', args)
     }
   },
   window: {

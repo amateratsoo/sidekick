@@ -13,6 +13,7 @@ export interface Api {
     }
     task: {
       createTask: (args: InsertableTask) => Promise<SelectableTask>
+      findAllByHabitId: (args: { habitId: string }) => Promise<SelectableTask[]>
     }
   }
   window: {

@@ -1,5 +1,5 @@
 import { createHabit, findAll } from './habit'
-import { createTask } from './task'
+import { createTask, findAllByHabitId } from './task'
 
 export const db = {
   habit: {
@@ -7,6 +7,7 @@ export const db = {
     findAll
   },
   task: {
-    createTask
+    createTask,
+    findAllByHabitId
   }
 }

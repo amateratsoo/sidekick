@@ -84,6 +84,10 @@ app.whenReady().then(() => {
     'db:task:create-task',
     async (_, args: InsertableTask) => await db.task.createTask(args)
   )
+  ipcMain.handle(
+    'db:task:find-all-by-habit-id',
+    async (_, args: { habitId: string }) => await db.task.findAllByHabitId(args)
+  )
 
   // window title bar buttons
   ipcMain.handle('window:close', () => mainWindow?.close())

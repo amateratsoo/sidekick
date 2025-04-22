@@ -26,3 +26,18 @@ export async function createTask({
     is_completed: !!is_completed
   }
 }
+
+export async function findAllByHabitId({
+  habitId
+}: {
+  habitId: string
+}): Promise<SelectableTask[]> {
+  const tasks = await db.selectFrom('task').where('habit_id', '=', habitId).selectAll().execute()
+
+  return tasks.map((task) => {
+    return {
+      ...task,
+      is_completed: !!task.is_completed
+    }
+  })
+}

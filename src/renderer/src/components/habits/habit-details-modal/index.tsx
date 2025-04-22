@@ -25,18 +25,24 @@ export function HabitDetailsModal({
   id,
   name,
   streak,
-  tasks: t = [],
   open,
   onOpenChange
-}: Props): JSX.Element {
+}: Props): JSX.Element | null {
   const [completionGraphMode, setCompletionGraphMode] = useState<'yearly' | 'monthly'>('monthly')
-  const [tasks, setTasks] = useState(t)
+  const [tasks, setTasks] = useState<SelectableTask[]>([])
 
-  useEffect(() => {
-    setTasks(t)
-  }, [t])
+  const [loading, setLoading] = useState(true)
 
   const { db } = window.api
+
+  useEffect(() => {
+    ;(async () => {
+      const tasks = await db.task.findAllByHabitId({ habitId: id })
+      setTasks(tasks)
+
+      setLoading(false)
+    })()
+  }, [])
 
   async function createTask() {
     const task = await db.task.createTask({
@@ -45,6 +51,9 @@ export function HabitDetailsModal({
 
     setTasks((prev) => [...prev, task])
   }
+
+  // to do (22/04/25): implement a proper loading method
+  if (loading) return null
 
   return (
     <Modal

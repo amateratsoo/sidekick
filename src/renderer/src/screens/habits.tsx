@@ -24,7 +24,6 @@ export function Habits(): JSX.Element {
 
   function openHabitDetailsModal(props: SelectableHabit): void {
     habitDetails.current = props
-    console.log(habitDetails.current)
 
     setOpenModal(true)
   }
@@ -53,11 +52,14 @@ export function Habits(): JSX.Element {
         ))}
       </div>
 
+      {/* i am not sure, but i think there's a little bit of flickering when closing the modal
+          dont' know why
+      */}
       <HabitDetailsModal
         open={openModal}
         onOpenChange={setOpenModal}
         {...habitDetails.current!}
-        // key={habitDetails.current?.id}
+        key={habitDetails.current?.id}
       />
     </main>
   )
