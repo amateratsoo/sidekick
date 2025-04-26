@@ -40,11 +40,7 @@ export function CreateHabitModal(): JSX.Element {
   async function createHabit(event: React.FormEvent): Promise<void> {
     event.preventDefault()
     const [habitName, habitDescription] = event.currentTarget.querySelectorAll('input')
-    const [name, description] = [
-      habitName.value.trim(),
-      habitDescription.value.trim()
-      // habitDescription.value.length > 0 ? habitDescription.value.trim() : undefined
-    ]
+    const [name, description] = [habitName.value.trim(), habitDescription.value.trim()]
 
     if (!name || habitsWeekdays.length == 0) {
       if (!name) {
@@ -65,6 +61,7 @@ export function CreateHabitModal(): JSX.Element {
       description: description,
       frequency: JSON.stringify(habitsWeekdays),
       badge: currentBadge || '💪',
+      // support for oklch and hex colors
       color: currentColor || c.green[500]
     }
 

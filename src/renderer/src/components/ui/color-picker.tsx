@@ -268,7 +268,10 @@ const ColorPicker = ({
     }
   }
 
+  const currentColor = useRef(default_value)
+
   useEffect(() => handleHexInputChange(default_value), [default_value])
+  useEffect(() => handleColorChange(currentColor.current), [currentColor.current])
 
   return (
     <Popover.Root>
@@ -349,7 +352,7 @@ const ColorPicker = ({
                       l: value.l
                     })
 
-                    handleColorChange(hex_formatted)
+                    handleColorChange(`#${hex_formatted}`)
 
                     return { ...value, hex: hex_formatted }
                   })
@@ -376,9 +379,11 @@ const ColorPicker = ({
                   setColor((prev) => {
                     const { hex, ...rest } = { ...prev, h: hue }
                     const hex_formatted = hslToHex({ ...rest })
+
+                    handleColorChange(`#${hex_formatted}`)
+
                     return { ...rest, hex: hex_formatted }
                   })
-                  handleColorChange(color.hex)
                 }}
               />
               <div className="relative h-fit w-full">
@@ -410,7 +415,7 @@ const ColorPicker = ({
                   value={color.hex}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handleHexInputChange(e.target.value)
-                    handleColorChange(color.hex)
+                    currentColor.current = `#${e.target.value}`
                   }}
                 />
                 <div className="absolute inset-y-0 right-0 flex h-full items-center px-[5px]">
@@ -447,7 +452,7 @@ const ColorPicker = ({
 
                         const hex = hslToHex({ h, s, l })
                         handleHexInputChange(hex)
-                        handleColorChange(hex)
+                        currentColor.current = `#${hex}`
                       }}
                     />
                   )
@@ -478,7 +483,7 @@ const ColorPicker = ({
 
                         const hex = hslToHex({ h, s, l })
                         handleHexInputChange(hex)
-                        handleColorChange(hex)
+                        currentColor.current = `#${hex}`
                       }}
                     />
                   )

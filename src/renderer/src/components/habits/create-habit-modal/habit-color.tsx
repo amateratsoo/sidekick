@@ -55,9 +55,7 @@ export function HabitColor({ currentColor, setCurrentColor }: Props): JSX.Elemen
         >
           <button
             type="button"
-            className={cn(
-              'rounded-full text-zinc-300 border border-zinc-900 px-2.5 py-1.5 cursor-pointer group hover:bg-green-500'
-            )}
+            className="rounded-full text-zinc-300 border border-zinc-900 px-2.5 py-1.5 cursor-pointer group hover:bg-green-500"
           >
             <DotsHorizontalIcon className="stroke-green-500 group-hover:text-green-800 group-hover:stroke-green-800" />
           </button>

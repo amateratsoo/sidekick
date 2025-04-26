@@ -36,6 +36,7 @@ export function TaskCard({
     >
       <div
         className="border-l-4 text-base p-2 bg-zinc-950 my-2 text-zinc-300 rounded-md"
+        // supports oklch and hex colors, feels like fixing with
         style={{ borderColor: color }}
       >
         <span className="group">
@@ -67,9 +68,9 @@ export function TaskCard({
                   align="center"
                   side="top"
                   sideOffset={10}
-                  className="bg-zinc-950 shadow-zinc-900/40 shadow-2xl rounded-lg"
+                  className="bg-zinc-950 rounded-lg"
                 >
-                  <div className="rounded-lg bg-zinc-950 border border-zinc-900 w-72 h-fit">
+                  <div className="rounded-lg bg-zinc-950 border border-zinc-900 shadow-zinc-900/40 shadow-2xl w-72 h-fit">
                     <div className="bg-zinc-900/50 rounded-lg">
                       <Input
                         className="w-full rounded-b-none rounded-t-lg m-0 outline-none focus:ring-2 focus:ring-zinc-600 bg-transparent pr-2 placeholder:text-zinc-600"
@@ -82,7 +83,7 @@ export function TaskCard({
                         className="w-full min-h-24 text-zinc-300 p-2 outline-none ring-0 ring-zinc-600 focus:ring-2 custom-scrollbar overflow-x-hidden placeholder:text-center placeholder:text-sm placeholder:font-sans placeholder:text-zinc-600 field-sizing-content bg-transparent h-full"
                         onChange={({ target }) => setDescription(target.value)}
                         placeholder="Use markdown ou texto simples para descrever a tarefa ✎𓂃"
-                        value={description}
+                        value={description || ''}
                       />
                     </div>
                   </div>
@@ -93,14 +94,12 @@ export function TaskCard({
         </span>
 
         <div className="w-96 max-w-96 prose prose-zinc lg:prose-lg dark:prose-invert">
-          <Markdown remarkPlugins={[remarkGfm]} components={{}}>
-            {description}
-          </Markdown>
+          <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
         </div>
       </div>
 
       <button
-        className="rounded-lg bg-zinc-900/60 size-7 flex items-center justify-center cursor-pointer"
+        className="rounded-lg bg-zinc-900/60 size-7 flex items-center justify-center cursor-pointer self-start mt-3.5"
         role="checkbox"
         onClick={() => setIsCompleted((prev) => !prev)}
       >
