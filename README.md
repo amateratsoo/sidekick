@@ -53,6 +53,12 @@ pnpm dev
 
 ## Build instructions
 
+### Windows
+
+```sh
+pnpm build:win
+```
+
 ### Mac
 
 ```sh
