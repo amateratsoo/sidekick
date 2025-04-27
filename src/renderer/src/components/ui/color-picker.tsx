@@ -1,5 +1,5 @@
 import React, { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
-import * as Popover from '@radix-ui/react-popover'
+import { Popover } from './popover'
 // @ts-ignore
 import c from 'tailwindcss/colors'
 
@@ -274,19 +274,21 @@ const ColorPicker = ({
   useEffect(() => handleColorChange(currentColor.current), [currentColor.current])
 
   return (
-    <Popover.Root>
-      <Popover.Trigger asChild>{children}</Popover.Trigger>
-      <Popover.Anchor />
-      <Popover.Portal>
-        <Popover.Content align="center" side="right" sideOffset={8} className="bg-zinc-950">
-          <div className="bg-zinc-950">
-            <style
-              id="slider-thumb-style"
-              dangerouslySetInnerHTML={{
-                // For the input range thumb styles. Some things are just easier to add to an external stylesheet.
-                // don't actually put this in production.
-                // Just putting this here for the sake of a single file in this example
-                __html: `
+    <Popover
+      trigger={children}
+      align="center"
+      side="bottom"
+      sideOffset={22}
+      className="bg-zinc-950"
+    >
+      <div className="bg-zinc-950">
+        <style
+          id="slider-thumb-style"
+          dangerouslySetInnerHTML={{
+            // For the input range thumb styles. Some things are just easier to add to an external stylesheet.
+            // don't actually put this in production.
+            // Just putting this here for the sake of a single file in this example
+            __html: `
               input[type='range']::-webkit-slider-thumb {
                 -webkit-appearance: none;
                 appearance: none;
@@ -330,42 +332,42 @@ const ColorPicker = ({
                 box-shadow: 0 0 0 1px #3f3f46; 
               }
               `
-              }}
-            />
-            <div
-              style={
-                {
-                  '--thumb-border-color': '#000000',
-                  '--thumb-ring-color': '#666666'
-                } as React.CSSProperties
-              }
-              className="z-30 flex max-w-[300px] select-none flex-col items-center gap-3 overscroll-none border p-2 border-zinc-900 bg-zinc-900/20 rounded-lg w-64 shadow-2xl shadow-zinc-900/40"
-            >
-              <DraggableColorCanvas
-                {...color}
-                handleChange={(parital) => {
-                  setColor((prev) => {
-                    const value = { ...prev, ...parital }
-                    const hex_formatted = hslToHex({
-                      h: value.h,
-                      s: value.s,
-                      l: value.l
-                    })
+          }}
+        />
+        <div
+          style={
+            {
+              '--thumb-border-color': '#000000',
+              '--thumb-ring-color': '#666666'
+            } as React.CSSProperties
+          }
+          className="z-30 flex max-w-[300px] select-none flex-col items-center gap-3 overscroll-none border p-2 border-zinc-900 bg-zinc-900/20 rounded-lg w-64 shadow-2xl shadow-zinc-900/40"
+        >
+          <DraggableColorCanvas
+            {...color}
+            handleChange={(parital) => {
+              setColor((prev) => {
+                const value = { ...prev, ...parital }
+                const hex_formatted = hslToHex({
+                  h: value.h,
+                  s: value.s,
+                  l: value.l
+                })
 
-                    handleColorChange(`#${hex_formatted}`)
+                handleColorChange(`#${hex_formatted}`)
 
-                    return { ...value, hex: hex_formatted }
-                  })
-                }}
-              />
-              <input
-                type="range"
-                min="0"
-                max="360"
-                value={color.h}
-                className="dark:border-zinc-7000 h-3 w-full cursor-pointer appearance-none rounded-full border border-zinc-200 bg-white text-white placeholder:text-white dark:border-zinc-700"
-                style={{
-                  background: `linear-gradient(to right, 
+                return { ...value, hex: hex_formatted }
+              })
+            }}
+          />
+          <input
+            type="range"
+            min="0"
+            max="360"
+            value={color.h}
+            className="dark:border-zinc-7000 h-3 w-full cursor-pointer appearance-none rounded-full border border-zinc-200 bg-white text-white placeholder:text-white dark:border-zinc-700"
+            style={{
+              background: `linear-gradient(to right, 
                     hsl(0, 100%, 50%), 
                     hsl(60, 100%, 50%), 
                     hsl(120, 100%, 50%), 
@@ -373,127 +375,125 @@ const ColorPicker = ({
                     hsl(240, 100%, 50%), 
                     hsl(300, 100%, 50%), 
                     hsl(360, 100%, 50%))`
-                }}
-                onChange={(e) => {
-                  const hue = e.target.valueAsNumber
-                  setColor((prev) => {
-                    const { hex, ...rest } = { ...prev, h: hue }
-                    const hex_formatted = hslToHex({ ...rest })
+            }}
+            onChange={(e) => {
+              const hue = e.target.valueAsNumber
+              setColor((prev) => {
+                const { hex, ...rest } = { ...prev, h: hue }
+                const hex_formatted = hslToHex({ ...rest })
 
-                    handleColorChange(`#${hex_formatted}`)
+                handleColorChange(`#${hex_formatted}`)
 
-                    return { ...rest, hex: hex_formatted }
-                  })
+                return { ...rest, hex: hex_formatted }
+              })
+            }}
+          />
+          <div className="relative h-fit w-full">
+            <div className="absolute inset-y-0 flex items-center px-[5px]">
+              <HashtagIcon className="size-4 text-zinc-600" />
+            </div>
+            <input
+              id="color-value"
+              className={clsx(
+                'flex w-full items-center justify-between rounded-lg border p-2 text-sm focus:ring-1',
+                //10 px for the paddng on the hashtag, 16px for the icon
+                'pl-[26px]',
+                // 10px for the padding on the color badge, 28px for the color badge
+                'pr-[38px]',
+                // bg & text
+                'bg-zinc-950/20 text-zinc-300',
+                // borders & backgrounds
+                'border-zinc-800',
+                // hover classes
+                '-hover:border-zinc-300',
+                '-dark:hover:border-zinc-600',
+                // focus classes
+                'focus:border-zinc-300 focus:ring-zinc-300 outline-none focus:ring-1',
+                '-dark:focus:border-zinc-600 -dark:focus:ring-zinc-600',
+                // selection styles
+                'selection:bg-black/20  selection:text-black',
+                'dark:selection:bg-white/30 dark:selection:text-white'
+              )}
+              value={color.hex}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                handleHexInputChange(e.target.value)
+                currentColor.current = `#${e.target.value}`
+              }}
+            />
+            <div className="absolute inset-y-0 right-0 flex h-full items-center px-[5px]">
+              <div
+                className="size-7 rounded-md border border-zinc-200 dark:border-zinc-800"
+                style={{
+                  backgroundColor: `hsl(${color.h}, ${color.s}%, ${color.l}%)`
                 }}
               />
-              <div className="relative h-fit w-full">
-                <div className="absolute inset-y-0 flex items-center px-[5px]">
-                  <HashtagIcon className="size-4 text-zinc-600" />
-                </div>
-                <input
-                  id="color-value"
-                  className={clsx(
-                    'flex w-full items-center justify-between rounded-lg border p-2 text-sm focus:ring-1',
-                    //10 px for the paddng on the hashtag, 16px for the icon
-                    'pl-[26px]',
-                    // 10px for the padding on the color badge, 28px for the color badge
-                    'pr-[38px]',
-                    // bg & text
-                    'bg-zinc-950/20 text-zinc-300',
-                    // borders & backgrounds
-                    'border-zinc-800',
-                    // hover classes
-                    '-hover:border-zinc-300',
-                    '-dark:hover:border-zinc-600',
-                    // focus classes
-                    'focus:border-zinc-300 focus:ring-zinc-300 outline-none focus:ring-1',
-                    '-dark:focus:border-zinc-600 -dark:focus:ring-zinc-600',
-                    // selection styles
-                    'selection:bg-black/20  selection:text-black',
-                    'dark:selection:bg-white/30 dark:selection:text-white'
-                  )}
-                  value={color.hex}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    handleHexInputChange(e.target.value)
-                    currentColor.current = `#${e.target.value}`
-                  }}
-                />
-                <div className="absolute inset-y-0 right-0 flex h-full items-center px-[5px]">
-                  <div
-                    className="size-7 rounded-md border border-zinc-200 dark:border-zinc-800"
-                    style={{
-                      backgroundColor: `hsl(${color.h}, ${color.s}%, ${color.l}%)`
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="w-full flex justify-between flex-wrap">
-                {Array.from({ length: 7 }, (_, index) => {
-                  const l = Math.min(color.l + index * 10, 80)
-
-                  return (
-                    <div
-                      key={index}
-                      role="button"
-                      data-color={`hsl(${color.h}, ${color.s}%, ${l}%)`}
-                      className="size-7 rounded-md cursor-pointer"
-                      style={{
-                        backgroundColor: `hsl(${color.h}, ${color.s}%, ${l}%)`
-                      }}
-                      onClick={(event) => {
-                        const [h, s, l] = (event.currentTarget.dataset.color as string)
-                          .replaceAll('hsl', '')
-                          .replaceAll('(', '')
-                          .replaceAll(')', '')
-                          .replaceAll('%', '')
-                          .split(',')
-                          .map((item) => Number(item))
-
-                        const hex = hslToHex({ h, s, l })
-                        handleHexInputChange(hex)
-                        currentColor.current = `#${hex}`
-                      }}
-                    />
-                  )
-                })}
-              </div>
-
-              <div className="w-full flex justify-between flex-wrap">
-                {Array.from({ length: 7 }, (_, index) => {
-                  const l = Math.max(color.l - index * 10, 20)
-
-                  return (
-                    <div
-                      key={index}
-                      role="button"
-                      data-color={`hsl(${color.h}, ${color.s}%, ${l}%)`}
-                      className="size-7 rounded-md cursor-pointer"
-                      style={{
-                        backgroundColor: `hsl(${color.h}, ${color.s}%, ${l}%)`
-                      }}
-                      onClick={(event) => {
-                        const [h, s, l] = (event.currentTarget.dataset.color as string)
-                          .replaceAll('hsl', '')
-                          .replaceAll('(', '')
-                          .replaceAll(')', '')
-                          .replaceAll('%', '')
-                          .split(',')
-                          .map((item) => Number(item))
-
-                        const hex = hslToHex({ h, s, l })
-                        handleHexInputChange(hex)
-                        currentColor.current = `#${hex}`
-                      }}
-                    />
-                  )
-                })}
-              </div>
             </div>
           </div>
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+
+          <div className="w-full flex justify-between flex-wrap">
+            {Array.from({ length: 7 }, (_, index) => {
+              const l = Math.min(color.l + index * 10, 80)
+
+              return (
+                <div
+                  key={index}
+                  role="button"
+                  data-color={`hsl(${color.h}, ${color.s}%, ${l}%)`}
+                  className="size-7 rounded-md cursor-pointer"
+                  style={{
+                    backgroundColor: `hsl(${color.h}, ${color.s}%, ${l}%)`
+                  }}
+                  onClick={(event) => {
+                    const [h, s, l] = (event.currentTarget.dataset.color as string)
+                      .replaceAll('hsl', '')
+                      .replaceAll('(', '')
+                      .replaceAll(')', '')
+                      .replaceAll('%', '')
+                      .split(',')
+                      .map((item) => Number(item))
+
+                    const hex = hslToHex({ h, s, l })
+                    handleHexInputChange(hex)
+                    currentColor.current = `#${hex}`
+                  }}
+                />
+              )
+            })}
+          </div>
+
+          <div className="w-full flex justify-between flex-wrap">
+            {Array.from({ length: 7 }, (_, index) => {
+              const l = Math.max(color.l - index * 10, 20)
+
+              return (
+                <div
+                  key={index}
+                  role="button"
+                  data-color={`hsl(${color.h}, ${color.s}%, ${l}%)`}
+                  className="size-7 rounded-md cursor-pointer"
+                  style={{
+                    backgroundColor: `hsl(${color.h}, ${color.s}%, ${l}%)`
+                  }}
+                  onClick={(event) => {
+                    const [h, s, l] = (event.currentTarget.dataset.color as string)
+                      .replaceAll('hsl', '')
+                      .replaceAll('(', '')
+                      .replaceAll(')', '')
+                      .replaceAll('%', '')
+                      .split(',')
+                      .map((item) => Number(item))
+
+                    const hex = hslToHex({ h, s, l })
+                    handleHexInputChange(hex)
+                    currentColor.current = `#${hex}`
+                  }}
+                />
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </Popover>
   )
 }
 

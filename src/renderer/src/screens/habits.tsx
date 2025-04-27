@@ -52,8 +52,9 @@ export function Habits(): JSX.Element {
         ))}
       </div>
 
-      {/* i am not sure, but i think there's a little bit of flickering when closing the modal
-          dont' know why
+      {/* i am not sure, but i think there's 
+          a little bit of flickering when 
+          closing the modal dont' know why
       */}
       <HabitDetailsModal
         open={openModal}

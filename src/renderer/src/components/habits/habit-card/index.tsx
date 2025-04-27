@@ -1,8 +1,7 @@
 import dayjs from 'dayjs'
 
 import type { SelectableHabit } from '@shared/types'
-import { getAllDaysOfTheYear } from '@renderer/utils/get-all-days-of-the-year'
-import { cn } from '@renderer/utils'
+import { cn, getAllDaysOfTheYear } from '@renderer/utils'
 
 const currentMonth = dayjs().month()
 const index = currentMonth > 0 ? currentMonth : getAllDaysOfTheYear().length - 1
