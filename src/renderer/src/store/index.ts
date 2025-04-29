@@ -1,3 +1,1 @@
-import { habitsAtom } from './habit'
-
-export { habitsAtom }
+export { habitsAtom } from './habit'

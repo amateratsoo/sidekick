@@ -1,20 +1,30 @@
 import type { ReactNode } from 'react'
 import { EmojiPicker as Picker } from '@ferrucc-io/emoji-picker'
 import { Popover } from './popover'
+import type { PopoverContentProps } from '@radix-ui/react-popover'
 
-interface Props {
+import { cn } from '@renderer/utils'
+
+interface Props extends PopoverContentProps {
   onEmojiSelect: (state: string) => void
   children: ReactNode
 }
 
-export function EmojiPicker({ onEmojiSelect, children }: Props) {
+export function EmojiPicker({ onEmojiSelect, children, className, ...props }: Props) {
   return (
-    <Popover trigger={children} align="center" side="bottom" sideOffset={8} className="bg-zinc-950">
+    <Popover
+      trigger={children}
+      align="center"
+      side="bottom"
+      sideOffset={8}
+      className={cn('bg-zinc-950', className)}
+    >
       <Picker
         className="border border-zinc-900 bg-zinc-900/20 rounded-lg w-64 shadow-zinc-900/40 shadow-2xl --shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)]"
         emojisPerRow={6}
         emojiSize={32}
         onEmojiSelect={onEmojiSelect}
+        {...props}
       >
         <Picker.Header className="p-2 pb-1">
           <Picker.Input

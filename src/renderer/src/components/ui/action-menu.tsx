@@ -1,0 +1,77 @@
+import type { ElementType } from 'react'
+import { Popover } from './popover'
+import { cn } from '@renderer/utils'
+import { PopoverContentProps } from '@radix-ui/react-popover'
+
+export interface Action {
+  name: string
+  icon: ElementType
+  action: () => void
+  className: string
+}
+
+interface Props extends PopoverContentProps {
+  actions: Action[]
+  icon?: ElementType
+  iconClassName?: string
+  triggerClassName?: string
+}
+
+export function ActionMenu({
+  actions,
+  icon: Icon,
+  className,
+  triggerClassName,
+  iconClassName,
+  ...props
+}: Props) {
+  return (
+    <Popover
+      align="center"
+      side="top"
+      sideOffset={10}
+      trigger={
+        <button
+          className={cn(
+            'rounded-md cursor-pointer h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800 ml-2.5',
+            triggerClassName
+          )}
+        >
+          {Icon && <Icon className={cn('size-3.5', iconClassName)} />}
+        </button>
+      }
+      className={cn(
+        'bg-zinc-950 rounded-lg border border-zinc-900 shadow-zinc-900/40 shadow-2xl',
+        className
+      )}
+      {...props}
+    >
+      <ul className="flex flex-col gap-1.5 rounded-lg p-1.5 w-40 bg-zinc-900/20">
+        {actions.map((action) => {
+          const Icon = action.icon
+
+          return (
+            <li
+              className={cn(
+                '--hover:bg-zinc-800/30 hover:bg-zinc-900/60 rounded-md text-zinc-300',
+                action.className
+              )}
+              key={action.name}
+            >
+              <button
+                onClick={action.action}
+                className="flex gap-2.5 cursor-pointer w-full h-full p-1 px-1.5"
+              >
+                <div className="rounded-md grid place-items-center h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800">
+                  <Icon className="size-4" />
+                </div>
+
+                <span>{action.name}</span>
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    </Popover>
+  )
+}

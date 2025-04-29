@@ -3,17 +3,27 @@ import {
   CounterClockwiseClockIcon,
   CursorTextIcon,
   Pencil2Icon,
-  Pencil1Icon
+  Pencil1Icon,
+  OpacityIcon
 } from '@radix-ui/react-icons'
 
-import { ColorPicker, EmojiPicker, Input, Modal, Popover } from '@renderer/components/ui'
+import {
+  ActionMenu,
+  ColorPicker,
+  EmojiPicker,
+  Input,
+  Modal,
+  Popover
+} from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
 import { TaskCard } from './task-card'
 import { CompletionGraph } from './completion-graph'
 
 import type { SelectableHabit, SelectableTask } from '@shared/types'
+import type { Action } from '@renderer/components/ui/action-menu'
 import dayjs from 'dayjs'
-import { Flame, Pen } from 'lucide-react'
+import { EraserIcon, Flame, Pen, PenLineIcon } from 'lucide-react'
+import { EditHabitPopover } from './edit-habit-popover'
 
 interface Props extends SelectableHabit {
   open: boolean
@@ -32,6 +42,8 @@ export function HabitDetailsModal({
   open,
   onOpenChange
 }: Props): JSX.Element | null {
+  const [isEditMode, setIsEditMode] = useState(false)
+
   const progressSectionItems = [
     { name: 'ofensiva', value: streak, icon: Flame },
     {
@@ -40,6 +52,21 @@ export function HabitDetailsModal({
       icon: CounterClockwiseClockIcon
     }
   ]
+
+  const actions: Action[] = [
+    {
+      name: 'Editar',
+      icon: CursorTextIcon,
+      action: () => {
+        setName(nameValue)
+        setIsEditMode(true)
+      },
+      className: ''
+    },
+    { name: 'Aparência', icon: OpacityIcon, className: '', action: () => {} },
+    { name: 'Apagar', icon: EraserIcon, action: () => {}, className: 'text-red-400' }
+  ]
+
   const [completionGraphMode, setCompletionGraphMode] = useState<'yearly' | 'monthly'>('monthly')
   const [tasks, setTasks] = useState<SelectableTask[]>([])
   const [loading, setLoading] = useState(true)
@@ -86,52 +113,23 @@ export function HabitDetailsModal({
           <span className="block text-zinc-500/20 text-lg font-bold font-serif">Eu vou</span>
           <div className="group flex">
             <p className="text-zinc-300 font-bold font-sans text-xl line-clamp-1">{nameValue}</p>
-            <Popover
-              align="center"
-              side="top"
-              sideOffset={10}
-              trigger={
-                <button
-                  className="rounded-md cursor-pointer hidden group-hover:grid place-items-center h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800 ml-2.5"
-                  onClick={() => setName(nameValue)}
-                >
-                  <Pen className="size-3.5" />
-                </button>
-              }
-              className="bg-zinc-950 rounded-lg"
-            >
-              <div className="rounded-lg bg-zinc-950 border border-zinc-900 shadow-zinc-900/40 shadow-2xl w-96 h-fit flex">
-                <div className="p-4 flex items-center justify-center">
-                  <EmojiPicker onEmojiSelect={setBadge}>
-                    <button className="rounded-lg p-2 bg-zinc-900/60 text-2xl aspect-square cursor-pointer">
-                      {badge}
-                    </button>
-                  </EmojiPicker>
+            <ActionMenu
+              actions={actions}
+              icon={PenLineIcon}
+              side="bottom"
+              triggerClassName="hidden group-hover:grid place-items-center"
+            />
 
-                  {/* <ColorPicker default_value={c} handleColorChange={setColor}>
-                    <button
-                      className="rounded-lg p-2 bg-zinc-900/60 text-2xl aspect-square cursor-pointer"
-                      style={{ backgroundColor: color }}
-                    />
-                  </ColorPicker> */}
-                </div>
-                <div className="bg-zinc-900/50 rounded-r-lg">
-                  <Input
-                    className="w-full rounded-none rounded-tr-lg m-0 outline-none focus:ring-2 focus:ring-zinc-600 bg-transparent pr-2 placeholder:text-zinc-600"
-                    value={name}
-                    onChange={({ target }) => setName(target.value)}
-                    placeholder="Pense em um nome criativo"
-                  />
-
-                  <Input
-                    className="w-full rounded-none rounded-br-lg m-0 outline-none focus:ring-2 focus:ring-zinc-600 bg-transparent pr-2 placeholder:text-zinc-600 text-zinc-300"
-                    onChange={({ target }) => setDescription(target.value)}
-                    placeholder="𖣠 vou fazer isso porque quero..."
-                    value={description || ''}
-                  />
-                </div>
-              </div>
-            </Popover>
+            <EditHabitPopover
+              badge={badge}
+              setBadge={setBadge}
+              description={description!}
+              setDescription={setDescription}
+              isEditMode={isEditMode}
+              setIsEditMode={setIsEditMode}
+              name={name}
+              setName={setName}
+            />
           </div>
         </div>
       </header>

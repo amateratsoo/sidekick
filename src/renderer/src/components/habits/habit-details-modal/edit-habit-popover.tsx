@@ -1,0 +1,58 @@
+import { EmojiPicker, Input, Popover } from '@renderer/components/ui'
+
+interface Props {
+  isEditMode: boolean
+  setIsEditMode: (state: boolean) => void
+  badge: string
+  setBadge: (state: string) => void
+  name: string
+  setName: (state: string) => void
+  description: string
+  setDescription: (state: string) => void
+}
+
+export function EditHabitPopover({
+  isEditMode,
+  setIsEditMode,
+  badge,
+  setBadge,
+  description,
+  setDescription,
+  name,
+  setName
+}: Props) {
+  return (
+    <Popover
+      open={isEditMode}
+      onOpenChange={setIsEditMode}
+      align="start"
+      side="top"
+      sideOffset={10}
+    >
+      <div className="rounded-lg bg-zinc-950 border border-zinc-900 shadow-zinc-900/40 shadow-2xl w-80 h-fit flex">
+        <div className="p-4 flex items-center justify-center">
+          <EmojiPicker onEmojiSelect={setBadge} className="mt-11">
+            <button className="rounded-lg p-2 bg-zinc-900/60 text-2xl aspect-square cursor-pointer">
+              {badge}
+            </button>
+          </EmojiPicker>
+        </div>
+        <div className="bg-zinc-900/50 rounded-r-lg">
+          <Input
+            className="w-full rounded-none rounded-tr-lg m-0 outline-none focus:ring-2 focus:ring-zinc-600 bg-transparent pr-2 placeholder:text-zinc-600 ring-0"
+            value={name}
+            onChange={({ target }) => setName(target.value)}
+            placeholder="Pense em um nome criativo"
+          />
+
+          <Input
+            className="w-full rounded-none rounded-br-lg m-0 outline-none focus:ring-2 focus:ring-zinc-600 bg-transparent pr-2 placeholder:text-zinc-600 text-zinc-300"
+            onChange={({ target }) => setDescription(target.value)}
+            placeholder="𖣠 vou fazer isso porque quero..."
+            value={description || ''}
+          />
+        </div>
+      </div>
+    </Popover>
+  )
+}

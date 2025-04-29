@@ -6,12 +6,21 @@ import { cn } from '@renderer/utils'
 
 interface Props extends PopoverContentProps {
   children: ReactNode
-  trigger: ReactNode
+  trigger?: ReactNode
+  onOpenChange?: (state: boolean) => void
+  open?: boolean
 }
 
-export function Popover({ children, trigger, className, ...props }: Props) {
+export function Popover({
+  children,
+  trigger = null,
+  className,
+  open = undefined,
+  onOpenChange = undefined,
+  ...props
+}: Props) {
   return (
-    <RadixPopover.Root>
+    <RadixPopover.Root onOpenChange={onOpenChange} open={open}>
       <RadixPopover.Trigger asChild>{trigger}</RadixPopover.Trigger>
       <RadixPopover.Anchor />
       <RadixPopover.Portal>

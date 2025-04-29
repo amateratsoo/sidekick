@@ -1,5 +1,5 @@
 import { app, shell, ipcMain, BrowserWindow } from 'electron'
-import { join } from 'path'
+import { join } from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon5.png?asset'
 
@@ -74,6 +74,7 @@ app.whenReady().then(() => {
   })
 
   // IPC
+
   // db endpoints
   ipcMain.handle('db:habit:find-all', async () => await db.habit.findAll())
   ipcMain.handle(
