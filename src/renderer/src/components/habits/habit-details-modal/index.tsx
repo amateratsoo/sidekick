@@ -1,20 +1,13 @@
 import { type SetStateAction, useEffect, useState } from 'react'
 import {
+  BlendingModeIcon,
   CounterClockwiseClockIcon,
   CursorTextIcon,
-  Pencil2Icon,
-  Pencil1Icon,
-  OpacityIcon
+  OpacityIcon,
+  ShadowInnerIcon
 } from '@radix-ui/react-icons'
 
-import {
-  ActionMenu,
-  ColorPicker,
-  EmojiPicker,
-  Input,
-  Modal,
-  Popover
-} from '@renderer/components/ui'
+import { ActionMenu, Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
 import { TaskCard } from './task-card'
 import { CompletionGraph } from './completion-graph'
@@ -22,7 +15,7 @@ import { CompletionGraph } from './completion-graph'
 import type { SelectableHabit, SelectableTask } from '@shared/types'
 import type { Action } from '@renderer/components/ui/action-menu'
 import dayjs from 'dayjs'
-import { EraserIcon, Flame, Pen, PenLineIcon } from 'lucide-react'
+import { EraserIcon, Flame, PenLineIcon } from 'lucide-react'
 import { EditHabitPopover } from './edit-habit-popover'
 
 interface Props extends SelectableHabit {
@@ -32,7 +25,7 @@ interface Props extends SelectableHabit {
 
 export function HabitDetailsModal({
   badge: b,
-  color: c,
+  color,
   created_at,
   description: d,
   frequency,
@@ -42,8 +35,6 @@ export function HabitDetailsModal({
   open,
   onOpenChange
 }: Props): JSX.Element | null {
-  const [isEditMode, setIsEditMode] = useState(false)
-
   const progressSectionItems = [
     { name: 'ofensiva', value: streak, icon: Flame },
     {
@@ -63,7 +54,7 @@ export function HabitDetailsModal({
       },
       className: ''
     },
-    { name: 'Aparência', icon: OpacityIcon, className: '', action: () => {} },
+    { name: 'Aparência', icon: ShadowInnerIcon, className: '', action: () => {} },
     { name: 'Apagar', icon: EraserIcon, action: () => {}, className: 'text-red-400' }
   ]
 
@@ -71,10 +62,10 @@ export function HabitDetailsModal({
   const [tasks, setTasks] = useState<SelectableTask[]>([])
   const [loading, setLoading] = useState(true)
 
+  const [isEditMode, setIsEditMode] = useState(false)
   const [name, setName] = useState(n || '')
   const [description, setDescription] = useState(d)
   const [badge, setBadge] = useState(b)
-  const [color, setColor] = useState(c)
 
   const nameValue = name!.length > 0 ? name : n
 

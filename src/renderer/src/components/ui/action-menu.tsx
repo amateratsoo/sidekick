@@ -1,7 +1,7 @@
 import type { ElementType } from 'react'
+import type { PopoverContentProps } from '@radix-ui/react-popover'
 import { Popover } from './popover'
 import { cn } from '@renderer/utils'
-import { PopoverContentProps } from '@radix-ui/react-popover'
 
 export interface Action {
   name: string
@@ -63,7 +63,7 @@ export function ActionMenu({
                 className="flex gap-2.5 cursor-pointer w-full h-full p-1 px-1.5"
               >
                 <div className="rounded-md grid place-items-center h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800">
-                  <Icon className="size-4" />
+                  <Icon className="size-3.5" />
                 </div>
 
                 <span>{action.name}</span>

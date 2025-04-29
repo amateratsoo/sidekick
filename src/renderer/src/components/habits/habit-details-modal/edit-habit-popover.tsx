@@ -37,18 +37,20 @@ export function EditHabitPopover({
             </button>
           </EmojiPicker>
         </div>
-        <div className="bg-zinc-900/50 rounded-r-lg">
+        <div className="bg-zinc-900/50 rounded-r-lg w-full">
           <Input
-            className="w-full rounded-none rounded-tr-lg m-0 outline-none focus:ring-2 focus:ring-zinc-600 bg-transparent pr-2 placeholder:text-zinc-600 ring-0"
+            className="w-full rounded-none rounded-tr-lg m-0 outline-none focus:ring-2 focus:ring-zinc-700 focus:border-0 bg-transparent pr-2 placeholder:text-zinc-600 ring-0"
             value={name}
             onChange={({ target }) => setName(target.value)}
             placeholder="Pense em um nome criativo"
           />
 
+          <div className="bg-zinc-900 h-px" role="hr" />
+
           <Input
-            className="w-full rounded-none rounded-br-lg m-0 outline-none focus:ring-2 focus:ring-zinc-600 bg-transparent pr-2 placeholder:text-zinc-600 text-zinc-300"
+            className="w-full rounded-none rounded-br-lg m-0 outline-none focus:ring-2 focus:ring-zinc-700 bg-transparent pr-2 placeholder:text-zinc-600 text-zinc-300 ring-0"
             onChange={({ target }) => setDescription(target.value)}
-            placeholder="𖣠 vou fazer isso porque quero..."
+            placeholder="Vou fazer isso porque quero..."
             value={description || ''}
           />
         </div>
