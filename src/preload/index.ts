@@ -9,9 +9,9 @@ export const api: Api = {
     habit: {
       findAll: () => ipcRenderer.invoke('db:habit:find-all'),
       create: (args) => ipcRenderer.invoke('db:habit:create', args),
-      destroy: (id) => ipcRenderer.invoke('db:task:destroy', id),
+      destroy: (id) => ipcRenderer.invoke('db:habit:destroy', id),
       update: (args) => ipcRenderer.invoke('db:habit:update', args),
-      findAllWithRelations: () => ipcRenderer.invoke('db:find-all-with-relations')
+      findAllWithRelations: () => ipcRenderer.invoke('db:habit:find-all-with-relations')
     },
     task: {
       create: (args) => ipcRenderer.invoke('db:task:create', args),

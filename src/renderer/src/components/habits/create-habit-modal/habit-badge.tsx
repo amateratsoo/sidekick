@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, type SetStateAction } from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 
 import { EmojiPicker } from '@renderer/components/ui'
@@ -6,7 +6,7 @@ import { cn } from '@renderer/utils'
 
 interface Props {
   currentBadge?: string
-  setCurrentBadge: (state: React.SetStateAction<string | undefined>) => void
+  setCurrentBadge: (state: SetStateAction<string | undefined>) => void
 }
 
 export function HabitBadge({ currentBadge, setCurrentBadge }: Props): JSX.Element {

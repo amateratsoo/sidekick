@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react'
 // @ts-ignore
 import colors from 'tailwindcss/colors'
-
-import { Modal } from '@renderer/components/ui'
-import { cn } from '@renderer/utils'
-import { habitsAtom } from '@renderer/store'
 import { useSetAtom } from 'jotai'
+import { habitsAtom } from '@renderer/store'
+
+import type { SelectableHabit } from '@shared/types'
+
+import { Modal, Input, Button } from '@renderer/components/ui'
 import { HabitFrequency } from './habit-frequency'
 import { HabitBadge } from './habit-badge'
 import { HabitColor } from './habit-color'
-import { Input } from '@renderer/components/ui'
-import { SelectableHabit } from '@shared/types'
 
 const { db } = window.api
 
@@ -77,15 +76,7 @@ export function CreateHabitModal(): JSX.Element {
       open={openModal}
       onOpenChange={setOpenModal}
       title="Criar novo hábito"
-      trigger={
-        <button
-          className={cn(
-            'rounded-lg bg-green-500 font-sans text-sm font-semibold text-zinc-950 px-2 py-1 cursor-pointer transition-transform active:scale-[93%]'
-          )}
-        >
-          novo hábito
-        </button>
-      }
+      trigger={<Button className="bg-green-500">novo hábito</Button>}
     >
       <form onSubmit={createHabit}>
         <div>

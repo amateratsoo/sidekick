@@ -79,6 +79,10 @@ app.whenReady().then(() => {
 
   // habit
   ipcMain.handle('db:habit:find-all', async () => await db.habit.findAll())
+  ipcMain.handle(
+    'db:habit:find-all-with-relations',
+    async () => await db.habit.findAllWithRelations()
+  )
   ipcMain.handle('db:habit:create', async (_, args: InsertableHabit) => await db.habit.create(args))
   ipcMain.handle('db:habit:destroy', async (_, id: string) => await db.habit.destroy(id))
   ipcMain.handle(

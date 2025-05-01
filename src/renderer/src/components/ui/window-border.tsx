@@ -6,8 +6,6 @@ interface Props {
   children: ReactNode
 }
 
-const borderPaddingInRem = 0.4
-
 const { window: win } = window.api
 
 const windowButtons = [

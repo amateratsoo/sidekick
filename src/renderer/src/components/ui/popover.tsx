@@ -1,3 +1,4 @@
+import { SetStateAction } from 'react'
 import * as RadixPopover from '@radix-ui/react-popover'
 import type { ReactNode } from 'react'
 import type { PopoverContentProps } from '@radix-ui/react-popover'
@@ -7,7 +8,7 @@ import { cn } from '@renderer/utils'
 interface Props extends PopoverContentProps {
   children: ReactNode
   trigger?: ReactNode
-  onOpenChange?: (state: boolean) => void
+  onOpenChange?: (state: SetStateAction<boolean>) => void
   open?: boolean
 }
 

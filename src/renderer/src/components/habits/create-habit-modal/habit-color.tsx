@@ -1,3 +1,4 @@
+import type { SetStateAction } from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 
 import { cn } from '@renderer/utils'
@@ -5,7 +6,7 @@ import { ColorPicker } from '@renderer/components/ui'
 
 interface Props {
   currentColor?: string
-  setCurrentColor: (state: React.SetStateAction<string | undefined>) => void
+  setCurrentColor: (state: SetStateAction<string | undefined>) => void
 }
 
 const colors = [

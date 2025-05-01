@@ -1,4 +1,11 @@
-import React, { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  type ReactNode,
+  type SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { Popover } from './popover'
 
 type ClassValue =
@@ -246,7 +253,7 @@ const ColorPicker = ({
 }: {
   default_value?: string
   children: ReactNode
-  handleColorChange?: (state: string) => void
+  handleColorChange?: (state: SetStateAction<string | undefined>) => void
 }) => {
   // Initialize from controlled prop or a default
   const [color, setColor] = useState<Color>(() => {

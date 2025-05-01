@@ -1,5 +1,10 @@
-import { type SetStateAction, useEffect, useRef, useState } from 'react'
+import { type SetStateAction, useEffect, useState } from 'react'
 import { BlendingModeIcon, CounterClockwiseClockIcon, CursorTextIcon } from '@radix-ui/react-icons'
+import { EraserIcon, Flame, PenLineIcon } from 'lucide-react'
+import dayjs from 'dayjs'
+
+import { useSetAtom } from 'jotai'
+import { habitsAtom } from '@renderer/store'
 
 import { ActionMenu, Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
@@ -8,14 +13,15 @@ import { CompletionGraph } from './completion-graph'
 
 import type { SelectableHabit, SelectableTask } from '@shared/types'
 import type { Action } from '@renderer/components/ui/action-menu'
-import dayjs from 'dayjs'
-import { EraserIcon, Flame, PenLineIcon } from 'lucide-react'
 import { EditHabitPopover } from './edit-habit-popover'
+import { AlertDialog } from '@renderer/components/ui/alert-dialog'
 
 interface Props extends SelectableHabit {
   open: boolean
   onOpenChange: (state: SetStateAction<boolean>) => void
 }
+
+const { db } = window.api
 
 export function HabitDetailsModal({
   badge: badgeFromProps,
@@ -29,32 +35,12 @@ export function HabitDetailsModal({
   open,
   onOpenChange
 }: Props): JSX.Element | null {
-  const progressSectionItems = [
-    { name: 'ofensiva', value: streak, icon: Flame },
-    {
-      name: 'começou em',
-      value: dayjs(created_at).format('DD/MM/YYYY'),
-      icon: CounterClockwiseClockIcon
-    }
-  ]
-
-  const actions: Action[] = [
-    {
-      name: 'Editar',
-      icon: CursorTextIcon,
-      action: () => {
-        setName(nameValue)
-        setIsEditMode(true)
-      },
-      className: ''
-    },
-    { name: 'Aparência', icon: BlendingModeIcon, className: '', action: () => {} },
-    { name: 'Apagar', icon: EraserIcon, action: () => {}, className: 'text-red-400' }
-  ]
-
   const [completionGraphMode, setCompletionGraphMode] = useState<'yearly' | 'monthly'>('monthly')
   const [tasks, setTasks] = useState<SelectableTask[]>([])
+  const setHabits = useSetAtom(habitsAtom)
+
   const [loading, setLoading] = useState(true)
+  const [openAlertDialog, setOpenAlertDialog] = useState(false)
 
   const [isEditMode, setIsEditMode] = useState(false)
   const [name, setName] = useState(nameFromProps || '')
@@ -73,8 +59,6 @@ export function HabitDetailsModal({
     streak,
     tasks: structuredClone(tasks)
   }
-
-  const { db } = window.api
 
   useEffect(() => {
     ;(async () => {
@@ -96,6 +80,8 @@ export function HabitDetailsModal({
 
   async function deleteHabit() {
     await db.habit.destroy(id)
+    setHabits((prev) => prev.filter((habit) => habit.id != id))
+    onOpenChange(false)
   }
 
   async function createTask() {
@@ -105,6 +91,38 @@ export function HabitDetailsModal({
 
     setTasks((prev) => [...prev, task])
   }
+
+  // menu & items
+
+  const progressSectionItems = [
+    { name: 'ofensiva', value: streak, icon: Flame },
+    {
+      name: 'começou em',
+      value: dayjs(created_at).format('DD/MM/YYYY'),
+      icon: CounterClockwiseClockIcon
+    }
+  ]
+
+  const actions: Action[] = [
+    {
+      name: 'Editar',
+      icon: CursorTextIcon,
+      action: () => {
+        setName(nameValue)
+        setIsEditMode(true)
+      },
+      className: ''
+    },
+    { name: 'Aparência', icon: BlendingModeIcon, className: '', action: () => {} },
+    {
+      name: 'Apagar',
+      icon: EraserIcon,
+      action: () => {
+        setOpenAlertDialog(true)
+      },
+      className: 'text-red-400'
+    }
+  ]
 
   if (loading) return null
 
@@ -186,7 +204,7 @@ export function HabitDetailsModal({
           <h2 className="text-zinc-300 font-sans font-semibold text-xl mb-4">Tarefas</h2>
           <div>
             {tasks.map((task) => {
-              return <TaskCard {...task} color={color} key={task.id} />
+              return <TaskCard {...task} setTasks={setTasks} color={color} key={task.id} />
             })}
             <button
               className="rounded-lg p-2 cursor-pointer text-center w-full border-dashed border-2 border-zinc-500/30 text-zinc-500/50 transition-transform active:scale-95 text-sm mt-4"
@@ -218,6 +236,19 @@ export function HabitDetailsModal({
           </div>
         </section>{' '}
       </div>
+
+      <AlertDialog
+        actions={[
+          { name: 'Cancelar', action: () => setOpenAlertDialog(false) },
+          { name: 'Apagar', className: 'bg-red-500 text-red-300', action: () => deleteHabit() }
+        ]}
+        open={openAlertDialog}
+        onOpenChange={setOpenAlertDialog}
+        title="Deseja mesmo apagar o hábito?"
+        titleClassName="text-xl"
+        description="Esta ação é irreversível"
+        descriptionClassName="text-zinc-600"
+      />
     </Modal>
   )
 }

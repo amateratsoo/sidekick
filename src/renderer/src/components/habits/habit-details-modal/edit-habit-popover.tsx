@@ -1,14 +1,15 @@
+import type { SetStateAction } from 'react'
 import { EmojiPicker, Input, Popover } from '@renderer/components/ui'
 
 interface Props {
   isEditMode: boolean
-  setIsEditMode: (state: boolean) => void
+  setIsEditMode: (state: SetStateAction<boolean>) => void
   badge: string
-  setBadge: (state: string) => void
+  setBadge: (state: SetStateAction<string>) => void
   name: string
-  setName: (state: string) => void
+  setName: (state: SetStateAction<string>) => void
   description: string
-  setDescription: (state: string) => void
+  setDescription: (state: SetStateAction<string | undefined>) => void
 }
 
 export function EditHabitPopover({

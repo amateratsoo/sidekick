@@ -1,11 +1,12 @@
+import type { SetStateAction } from 'react'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { cn } from '@renderer/utils'
 
 interface Props {
   habitsWeekdays: string[]
-  setHabitsWeekdays: (state: React.SetStateAction<string[]>) => void
+  setHabitsWeekdays: (state: SetStateAction<string[]>) => void
   showError: boolean
-  setShowError: (state: boolean) => void
+  setShowError: (state: SetStateAction<boolean>) => void
 }
 
 const weekdays = ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo']

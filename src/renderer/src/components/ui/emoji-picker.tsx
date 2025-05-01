@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, SetStateAction } from 'react'
 import { EmojiPicker as Picker } from '@ferrucc-io/emoji-picker'
 import { Popover } from './popover'
 import type { PopoverContentProps } from '@radix-ui/react-popover'
@@ -6,7 +6,7 @@ import type { PopoverContentProps } from '@radix-ui/react-popover'
 import { cn } from '@renderer/utils'
 
 interface Props extends PopoverContentProps {
-  onEmojiSelect: (state: string) => void
+  onEmojiSelect: (state: SetStateAction<string | undefined>) => void
   children: ReactNode
 }
 

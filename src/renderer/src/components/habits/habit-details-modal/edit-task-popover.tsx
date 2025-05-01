@@ -1,12 +1,13 @@
+import type { SetStateAction } from 'react'
 import { Input, Popover } from '@renderer/components/ui'
 
 interface Props {
   isEditMode: boolean
-  setIsEditMode: (state: boolean) => void
+  setIsEditMode: (state: SetStateAction<boolean>) => void
   name: string
-  setName: (state: string) => void
+  setName: (state: SetStateAction<string | undefined>) => void
   description: string
-  setDescription: (state: string) => void
+  setDescription: (state: SetStateAction<string | undefined>) => void
 }
 
 export function EditTaskPopover({

@@ -1,11 +1,11 @@
-import { type ComponentProps } from 'react'
+import type { ComponentProps, SetStateAction } from 'react'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 
 import { cn } from '@renderer/utils'
 
 interface Props extends ComponentProps<'input'> {
   showError?: boolean
-  setShowError?: (state: boolean) => void
+  setShowError?: (state: SetStateAction<boolean>) => void
   errorMessage?: string
 }
 

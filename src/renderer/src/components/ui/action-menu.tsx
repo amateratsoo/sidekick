@@ -7,7 +7,7 @@ export interface Action {
   name: string
   icon: ElementType
   action: () => void
-  className: string
+  className?: string
 }
 
 interface Props extends PopoverContentProps {

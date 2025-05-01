@@ -1,18 +1,26 @@
+import { type SetStateAction, useState } from 'react'
+
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeHighlight from 'rehype-highlight'
+import 'highlight.js/styles/github-dark.css'
+
 import { CursorTextIcon, CheckIcon, EraserIcon } from '@radix-ui/react-icons'
 import { PenLineIcon } from 'lucide-react'
 
+import type { Action } from '@renderer/components/ui/action-menu'
 import { cn } from '@renderer/utils'
-import { useState } from 'react'
-import { SelectableTask } from '@shared/types'
+import type { SelectableTask } from '@shared/types'
 import { ActionMenu } from '@renderer/components/ui'
 import { EditTaskPopover } from './edit-task-popover'
-import type { Action } from '@renderer/components/ui/action-menu'
+import { AlertDialog } from '@renderer/components/ui/alert-dialog'
 
 interface Props extends SelectableTask {
   color: string
+  setTasks: (state: SetStateAction<SelectableTask[]>) => void
 }
+
+const { db } = window.api
 
 export function TaskCard({
   created_at,
@@ -21,8 +29,11 @@ export function TaskCard({
   id,
   is_completed,
   name: nameFromProps,
-  color
+  color,
+  setTasks
 }: Props) {
+  const [openAlertDialog, setOpenAlertDialog] = useState(false)
+
   const [isEditMode, setIsEditMode] = useState(false)
   const [name, setName] = useState(nameFromProps)
   const [description, setDescription] = useState(descriptionFromProps)
@@ -37,11 +48,21 @@ export function TaskCard({
       action: () => {
         setName(nameValue)
         setIsEditMode(true)
-      },
-      className: ''
+      }
     },
-    { name: 'Apagar', icon: EraserIcon, action: () => {}, className: 'text-red-400' }
+    {
+      name: 'Apagar',
+      icon: EraserIcon,
+      action: () => setOpenAlertDialog(true),
+      className: 'text-red-400'
+    }
   ]
+
+  async function deleteTask() {
+    await db.task.destroy(id)
+    setTasks((prev) => prev.filter((task) => task.id != id))
+    setOpenAlertDialog(false)
+  }
 
   return (
     <div
@@ -84,7 +105,9 @@ export function TaskCard({
         </span>
 
         <div className="w-96 max-w-96 prose prose-zinc lg:prose-lg dark:prose-invert">
-          <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
+          <Markdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
+            {description}
+          </Markdown>
         </div>
       </div>
 
@@ -95,6 +118,19 @@ export function TaskCard({
       >
         {isCompleted && <CheckIcon className="size-5" />}
       </button>
+
+      <AlertDialog
+        actions={[
+          { name: 'Cancelar', action: () => setOpenAlertDialog(false) },
+          { name: 'Apagar', className: 'bg-red-500 text-red-300', action: () => deleteTask() }
+        ]}
+        open={openAlertDialog}
+        onOpenChange={setOpenAlertDialog}
+        title="Deseja mesmo apagar a tarefa?"
+        titleClassName="text-xl"
+        description="Esta ação é irreversível"
+        descriptionClassName="text-zinc-600"
+      />
     </div>
   )
 }
