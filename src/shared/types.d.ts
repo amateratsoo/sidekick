@@ -1,26 +1,19 @@
-import type {
+export type {
   InsertableHabit,
   SelectableHabit,
   SelectableTask,
-  InsertableTask
+  InsertableTask,
+  UpdateableHabit,
+  UpdateableTask
 } from 'src/main/database/schema'
 
+import { db } from 'src/main/database/controllers'
+
 export interface Api {
-  db: {
-    habit: {
-      createHabit: (args: InsertableHabit) => Promise<SelectableHabit>
-      findAll: () => Promise<SelectableHabit[]>
-    }
-    task: {
-      createTask: (args: InsertableTask) => Promise<SelectableTask>
-      findAllByHabitId: (args: { habitId: string }) => Promise<SelectableTask[]>
-    }
-  }
+  db: typeof db
   window: {
     maximize: () => void
     minimize: () => void
     close: () => void
   }
 }
-
-export type { InsertableHabit, SelectableHabit, InsertableTask, SelectableTask }

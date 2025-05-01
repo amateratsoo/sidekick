@@ -1,11 +1,5 @@
-import { type SetStateAction, useEffect, useState } from 'react'
-import {
-  BlendingModeIcon,
-  CounterClockwiseClockIcon,
-  CursorTextIcon,
-  OpacityIcon,
-  ShadowInnerIcon
-} from '@radix-ui/react-icons'
+import { type SetStateAction, useEffect, useRef, useState } from 'react'
+import { BlendingModeIcon, CounterClockwiseClockIcon, CursorTextIcon } from '@radix-ui/react-icons'
 
 import { ActionMenu, Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
@@ -24,13 +18,13 @@ interface Props extends SelectableHabit {
 }
 
 export function HabitDetailsModal({
-  badge: b,
+  badge: badgeFromProps,
   color,
   created_at,
-  description: d,
+  description: descriptionFromProps,
   frequency,
   id,
-  name: n,
+  name: nameFromProps,
   streak,
   open,
   onOpenChange
@@ -54,7 +48,7 @@ export function HabitDetailsModal({
       },
       className: ''
     },
-    { name: 'Aparência', icon: ShadowInnerIcon, className: '', action: () => {} },
+    { name: 'Aparência', icon: BlendingModeIcon, className: '', action: () => {} },
     { name: 'Apagar', icon: EraserIcon, action: () => {}, className: 'text-red-400' }
   ]
 
@@ -63,27 +57,51 @@ export function HabitDetailsModal({
   const [loading, setLoading] = useState(true)
 
   const [isEditMode, setIsEditMode] = useState(false)
-  const [name, setName] = useState(n || '')
-  const [description, setDescription] = useState(d)
-  const [badge, setBadge] = useState(b)
+  const [name, setName] = useState(nameFromProps || '')
+  const [description, setDescription] = useState(descriptionFromProps)
+  const [badge, setBadge] = useState(badgeFromProps)
 
-  const nameValue = name!.length > 0 ? name : n
+  const nameValue = name!.length > 0 ? name : nameFromProps
+
+  const initialStateToCompare = {
+    name: nameFromProps,
+    badge: badgeFromProps,
+    description: descriptionFromProps,
+    color,
+    created_at,
+    frequency,
+    streak,
+    tasks: structuredClone(tasks)
+  }
 
   const { db } = window.api
 
   useEffect(() => {
     ;(async () => {
-      const tasks = await db.task.findAllByHabitId({ habitId: id })
+      const tasks = await db.task.findAllByHabitId(id)
       setTasks(tasks)
+
+      initialStateToCompare.tasks = structuredClone(tasks)
 
       setLoading(false)
     })()
   }, [])
 
+  useEffect(() => {
+    // when closing
+    if (!open && name) {
+      console.log(initialStateToCompare)
+    }
+  }, [open])
+
+  async function deleteHabit() {
+    await db.habit.destroy(id)
+  }
+
   async function createTask() {
-    const task = await db.task.createTask({
+    const task = (await db.task.create({
       habit_id: id
-    })
+    })) as SelectableTask
 
     setTasks((prev) => [...prev, task])
   }

@@ -1,13 +1,11 @@
-import { createHabit, findAll } from './habit'
-import { createTask, findAllByHabitId } from './task'
+import * as habit from './habit'
+import * as task from './task'
 
 export const db = {
   habit: {
-    createHabit,
-    findAll
+    ...habit
   },
   task: {
-    createTask,
-    findAllByHabitId
+    ...task
   }
 }

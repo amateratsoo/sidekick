@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Kysely, sql, Migration } from 'kysely'
 
-// @ts-ignore - colors exists inside the tailwind module
-import c from 'tailwindcss/colors'
+// @ts-ignore
+import colors from 'tailwindcss/colors'
 
 const description = 'database initial setup'
 
@@ -14,7 +14,7 @@ async function up(db: Kysely<any>): Promise<void> {
     .addColumn('name', 'text', (column) => column.notNull())
     .addColumn('description', 'text', (column) => column.defaultTo(''))
     .addColumn('badge', 'text', (column) => column.defaultTo('💪').notNull())
-    .addColumn('color', 'text', (column) => column.defaultTo(c.blue[500]).notNull())
+    .addColumn('color', 'text', (column) => column.defaultTo(colors.blue[500]).notNull())
     .addColumn('frequency', 'json', (column) => column.notNull())
     .addColumn('streak', 'integer', (column) => column.defaultTo(0).notNull())
     .addColumn('created_at', 'timestamp', (column) =>

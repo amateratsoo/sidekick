@@ -16,19 +16,19 @@ interface Props extends SelectableTask {
 
 export function TaskCard({
   created_at,
-  description: d,
+  description: descriptionFromProps,
   habit_id,
   id,
   is_completed,
-  name: n,
+  name: nameFromProps,
   color
 }: Props) {
   const [isEditMode, setIsEditMode] = useState(false)
-  const [name, setName] = useState(n)
-  const [description, setDescription] = useState(d)
+  const [name, setName] = useState(nameFromProps)
+  const [description, setDescription] = useState(descriptionFromProps)
   const [isCompleted, setIsCompleted] = useState(is_completed)
 
-  const nameValue = name!.length > 0 ? name : n
+  const nameValue = name!.length > 0 ? name : nameFromProps
 
   const actions: Action[] = [
     {

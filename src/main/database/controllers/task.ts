@@ -2,13 +2,13 @@ import { db } from '../db'
 import type { InsertableTask, SelectableTask, UpdateableTask } from '../schema'
 import { generateUUID } from '../../../shared/constants'
 
-export async function createTask({
+export async function create({
   habit_id,
   id = generateUUID(),
   is_completed = false,
   name,
   description
-}: InsertableTask): Promise<SelectableTask> {
+}: InsertableTask): Promise<SelectableTask | undefined> {
   const task = await db
     .insertInto('task')
     .values({
@@ -19,20 +19,18 @@ export async function createTask({
       description
     })
     .returningAll()
-    .execute()
+    .executeTakeFirst()
+
+  if (!task) return undefined
 
   return {
-    ...task[0],
+    ...task,
     is_completed: !!is_completed
   }
 }
 
-export async function findAllByHabitId({
-  habitId
-}: {
-  habitId: string
-}): Promise<SelectableTask[]> {
-  const tasks = await db.selectFrom('task').where('habit_id', '=', habitId).selectAll().execute()
+export async function findAllByHabitId(id: string): Promise<SelectableTask[]> {
+  const tasks = await db.selectFrom('task').where('habit_id', '=', id).selectAll().execute()
 
   return tasks.map((task) => {
     return {
@@ -40,4 +38,18 @@ export async function findAllByHabitId({
       is_completed: !!task.is_completed
     }
   })
+}
+
+export async function destroy(id: string) {
+  await db.deleteFrom('task').where('task.id', '=', id).execute()
+}
+
+export async function update({
+  id,
+  valuesToUpdate
+}: {
+  id: string
+  valuesToUpdate: UpdateableTask
+}): Promise<void> {
+  await db.updateTable('task').set(valuesToUpdate).where('id', '=', id).execute()
 }

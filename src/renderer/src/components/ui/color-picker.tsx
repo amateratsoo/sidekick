@@ -1,7 +1,5 @@
 import React, { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { Popover } from './popover'
-// @ts-ignore
-import c from 'tailwindcss/colors'
 
 type ClassValue =
   | ClassArray

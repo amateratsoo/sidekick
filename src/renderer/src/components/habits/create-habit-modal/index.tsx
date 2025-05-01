@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-// @ts-ignore (module `colors` exists in `tailwindcss`)
-import c from 'tailwindcss/colors'
+// @ts-ignore
+import colors from 'tailwindcss/colors'
 
 import { Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
@@ -10,6 +10,7 @@ import { HabitFrequency } from './habit-frequency'
 import { HabitBadge } from './habit-badge'
 import { HabitColor } from './habit-color'
 import { Input } from '@renderer/components/ui'
+import { SelectableHabit } from '@shared/types'
 
 const { db } = window.api
 
@@ -61,11 +62,10 @@ export function CreateHabitModal(): JSX.Element {
       description: description,
       frequency: JSON.stringify(habitsWeekdays),
       badge: currentBadge || '💪',
-      // support for oklch and hex colors
-      color: currentColor || c.green[500]
+      color: currentColor || colors.green[500]
     }
 
-    const habit = await db.habit.createHabit(data)
+    const habit = (await db.habit.create(data)) as SelectableHabit
 
     habits((prev) => [...prev, habit])
     setOpenModal(false)

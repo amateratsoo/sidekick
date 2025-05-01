@@ -4,7 +4,7 @@ import { db } from '../db'
 import type { InsertableHabit, SelectableHabit, SelectableTask, UpdateableHabit } from '../schema'
 import { generateUUID } from '../../../shared/constants'
 
-export async function createHabit({
+export async function create({
   id = generateUUID(),
   badge = undefined,
   color = undefined,
@@ -12,7 +12,7 @@ export async function createHabit({
   streak = 0,
   name,
   description = ''
-}: InsertableHabit): Promise<SelectableHabit> {
+}: InsertableHabit): Promise<SelectableHabit | undefined> {
   const habit = await db
     .insertInto('habit')
     .values({
@@ -25,13 +25,22 @@ export async function createHabit({
       description
     })
     .returningAll()
-    .execute()
+    .executeTakeFirst()
 
-  return habit[0]
+  if (!habit) return undefined
+
+  return habit
 }
 
 export async function findAll(): Promise<SelectableHabit[]> {
-  return await db.selectFrom('habit').selectAll().execute()
+  const habits = await db.selectFrom('habit').selectAll().execute()
+
+  return habits.map((habit) => {
+    return {
+      ...habit,
+      frequency: JSON.parse(String(habit.frequency))
+    }
+  })
 }
 
 export async function findAllWithRelations(): Promise<SelectableHabit[]> {
@@ -74,11 +83,11 @@ export async function findAllWithRelations(): Promise<SelectableHabit[]> {
   })
 }
 
-export async function deleteHabitById(id: string): Promise<void> {
+export async function destroy(id: string): Promise<void> {
   await db.deleteFrom('habit').where('id', '=', id).execute()
 }
 
-export async function updateHabitById({
+export async function update({
   id,
   valuesToUpdate
 }: {

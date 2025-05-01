@@ -2,8 +2,9 @@ import path from 'node:path'
 import fs from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { randomUUID, type UUID } from 'node:crypto'
+import { is } from '@electron-toolkit/utils'
 
-const pathToDb = path.join(homedir(), 'sidekick', 'dev.db')
+const pathToDb = path.join(homedir(), 'sidekick', `${is.dev ? 'dev.db' : 'sidekick.db'}`)
 
 // Ensure the directory exists before creating the file
 async function ensureDbFileExists(): Promise<void> {

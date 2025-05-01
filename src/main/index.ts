@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon5.png?asset'
 
 import { db } from './database/controllers'
-import { InsertableHabit, InsertableTask } from '@shared/types'
+import { InsertableHabit, InsertableTask, UpdateableHabit, UpdateableTask } from '@shared/types'
 
 // feature flags
 const blurred_window = false
@@ -76,18 +76,38 @@ app.whenReady().then(() => {
   // IPC
 
   // db endpoints
+
+  // habit
   ipcMain.handle('db:habit:find-all', async () => await db.habit.findAll())
+  ipcMain.handle('db:habit:create', async (_, args: InsertableHabit) => await db.habit.create(args))
+  ipcMain.handle('db:habit:destroy', async (_, id: string) => await db.habit.destroy(id))
   ipcMain.handle(
-    'db:habit:create-habit',
-    async (_, args: InsertableHabit) => await db.habit.createHabit(args)
+    'db:habit:update',
+    async (
+      _,
+      args: {
+        id: string
+        valuesToUpdate: UpdateableHabit
+      }
+    ) => await db.habit.update(args)
   )
-  ipcMain.handle(
-    'db:task:create-task',
-    async (_, args: InsertableTask) => await db.task.createTask(args)
-  )
+
+  // task
+  ipcMain.handle('db:task:create', async (_, args: InsertableTask) => await db.task.create(args))
   ipcMain.handle(
     'db:task:find-all-by-habit-id',
-    async (_, args: { habitId: string }) => await db.task.findAllByHabitId(args)
+    async (_, habitId: string) => await db.task.findAllByHabitId(habitId)
+  )
+  ipcMain.handle('db:task:destroy', async (_, id: string) => await db.task.destroy(id))
+  ipcMain.handle(
+    'db:task:update',
+    async (
+      _,
+      args: {
+        id: string
+        valuesToUpdate: UpdateableTask
+      }
+    ) => await db.task.update(args)
   )
 
   // window title bar buttons
