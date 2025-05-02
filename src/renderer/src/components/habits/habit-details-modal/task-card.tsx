@@ -1,4 +1,6 @@
-import { type SetStateAction, useState } from 'react'
+import { type SetStateAction, useEffect, useState } from 'react'
+
+import { useSetAtom } from 'jotai'
 
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -14,6 +16,7 @@ import type { SelectableTask } from '@shared/types'
 import { ActionMenu } from '@renderer/components/ui'
 import { EditTaskPopover } from './edit-task-popover'
 import { AlertDialog } from '@renderer/components/ui/alert-dialog'
+import { currentTasksAtom } from '@renderer/store'
 
 interface Props extends SelectableTask {
   color: string
@@ -34,6 +37,7 @@ export function TaskCard({
 }: Props) {
   const [openAlertDialog, setOpenAlertDialog] = useState(false)
 
+  const currentTasks = useSetAtom(currentTasksAtom)
   const [isEditMode, setIsEditMode] = useState(false)
   const [name, setName] = useState(nameFromProps)
   const [description, setDescription] = useState(descriptionFromProps)
@@ -63,6 +67,52 @@ export function TaskCard({
     setTasks((prev) => prev.filter((task) => task.id != id))
     setOpenAlertDialog(false)
   }
+
+  function checkTask() {
+    setIsCompleted((prev) => {
+      // find the task with the same id and change
+      // the is_completed status
+      // then reflect the changes on the ui
+      currentTasks((t) => {
+        return t.map((task) => {
+          if (task.id == id) {
+            return {
+              ...task,
+              is_completed: !prev
+            }
+          }
+
+          return task
+        })
+      })
+
+      return !prev
+    })
+  }
+
+  useEffect(() => {
+    // note: when i click off the modal,
+    // in the overlay for example
+    // the state is not saved
+    if (!isEditMode) {
+      currentTasks((prev) => {
+        return prev.map((task) => {
+          if (task.id == id) {
+            return {
+              created_at,
+              description,
+              habit_id,
+              id,
+              is_completed,
+              name
+            }
+          }
+
+          return task
+        })
+      })
+    }
+  }, [isEditMode])
 
   return (
     <div
@@ -114,7 +164,7 @@ export function TaskCard({
       <button
         className="rounded-lg bg-zinc-900/60 size-7 flex items-center justify-center cursor-pointer self-start mt-3.5"
         role="checkbox"
-        onClick={() => setIsCompleted((prev) => !prev)}
+        onClick={checkTask}
       >
         {isCompleted && <CheckIcon className="size-5" />}
       </button>

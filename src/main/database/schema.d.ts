@@ -25,7 +25,7 @@ interface TaskTable {
   id: ColumnType<string, string | undefined, never>
   name: string | undefined
   description: string | undefined
-  is_completed?: ColumnType<boolean, 0 | 1 | boolean>
+  is_completed?: ColumnType<boolean, 0 | 1 | boolean, 0 | 1 | boolean>
   habit_id: string
   created_at: ColumnType<Date, string | undefined, never>
 }

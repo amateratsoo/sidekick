@@ -1,10 +1,10 @@
-import { type SetStateAction, useEffect, useState } from 'react'
+import { type SetStateAction, useEffect, useRef, useState } from 'react'
 import { BlendingModeIcon, CounterClockwiseClockIcon, CursorTextIcon } from '@radix-ui/react-icons'
 import { EraserIcon, Flame, PenLineIcon } from 'lucide-react'
 import dayjs from 'dayjs'
 
-import { useSetAtom } from 'jotai'
-import { habitsAtom } from '@renderer/store'
+import { useSetAtom, useAtom } from 'jotai'
+import { habitsAtom, currentTasksAtom } from '@renderer/store'
 
 import { ActionMenu, Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
@@ -25,19 +25,21 @@ const { db } = window.api
 
 export function HabitDetailsModal({
   badge: badgeFromProps,
-  color,
+  color: colorFromProps,
   created_at,
   description: descriptionFromProps,
-  frequency,
+  frequency: frequencyFromProps,
   id,
   name: nameFromProps,
-  streak,
+  streak: StreakFromProps,
   open,
   onOpenChange
 }: Props): JSX.Element | null {
   const [completionGraphMode, setCompletionGraphMode] = useState<'yearly' | 'monthly'>('monthly')
-  const [tasks, setTasks] = useState<SelectableTask[]>([])
   const setHabits = useSetAtom(habitsAtom)
+  const [tasks, setTasks] = useAtom(currentTasksAtom)
+
+  const initialTasks = useRef<SelectableTask[]>([])
 
   const [loading, setLoading] = useState(true)
   const [openAlertDialog, setOpenAlertDialog] = useState(false)
@@ -46,26 +48,17 @@ export function HabitDetailsModal({
   const [name, setName] = useState(nameFromProps || '')
   const [description, setDescription] = useState(descriptionFromProps)
   const [badge, setBadge] = useState(badgeFromProps)
+  const [color, setColor] = useState(colorFromProps)
 
   const nameValue = name!.length > 0 ? name : nameFromProps
 
-  const initialStateToCompare = {
-    name: nameFromProps,
-    badge: badgeFromProps,
-    description: descriptionFromProps,
-    color,
-    created_at,
-    frequency,
-    streak,
-    tasks: structuredClone(tasks)
-  }
+  const streak = useRef(StreakFromProps)
 
   useEffect(() => {
     ;(async () => {
       const tasks = await db.task.findAllByHabitId(id)
       setTasks(tasks)
-
-      initialStateToCompare.tasks = structuredClone(tasks)
+      initialTasks.current = tasks
 
       setLoading(false)
     })()
@@ -74,7 +67,72 @@ export function HabitDetailsModal({
   useEffect(() => {
     // when closing
     if (!open && name) {
-      console.log(initialStateToCompare)
+      // save habits only if something changed
+
+      if (
+        nameFromProps != name ||
+        badgeFromProps != badge ||
+        descriptionFromProps != description ||
+        colorFromProps != color ||
+        frequencyFromProps != frequencyFromProps
+      ) {
+        ;(async () => {
+          await db.habit.update({
+            id,
+            valuesToUpdate: {
+              badge,
+              color,
+              description,
+              name
+            }
+          })
+
+          setHabits((prev) => {
+            return prev.map((habit) => {
+              if (habit.id == id) {
+                return {
+                  badge,
+                  color,
+                  description,
+                  name,
+                  id,
+                  frequency: frequencyFromProps,
+                  streak: streak.current,
+                  created_at
+                }
+              }
+
+              return habit
+            })
+          })
+        })()
+      }
+
+      // save tasks only if something changed
+      const tasksDidntChange = tasks.every((task) => {
+        const sameTask = initialTasks.current.find((t) => t.id == task.id)
+
+        if (!sameTask) return false
+
+        return (
+          task.description == sameTask?.description &&
+          task.name == sameTask?.name &&
+          task.is_completed == sameTask?.is_completed
+        )
+      })
+
+      if (!tasksDidntChange) {
+        tasks.forEach(async (task) => {
+          await db.task.update({
+            id: task.id,
+            valuesToUpdate: {
+              description: task.description,
+              is_completed: task.is_completed ? 1 : 0,
+              name: task.name
+            }
+          })
+        })
+      }
     }
   }, [open])
 
@@ -95,7 +153,7 @@ export function HabitDetailsModal({
   // menu & items
 
   const progressSectionItems = [
-    { name: 'ofensiva', value: streak, icon: Flame },
+    { name: 'ofensiva', value: streak.current, icon: Flame },
     {
       name: 'começou em',
       value: dayjs(created_at).format('DD/MM/YYYY'),
@@ -110,10 +168,9 @@ export function HabitDetailsModal({
       action: () => {
         setName(nameValue)
         setIsEditMode(true)
-      },
-      className: ''
+      }
     },
-    { name: 'Aparência', icon: BlendingModeIcon, className: '', action: () => {} },
+    { name: 'Aparência', icon: BlendingModeIcon, action: () => {} },
     {
       name: 'Apagar',
       icon: EraserIcon,
