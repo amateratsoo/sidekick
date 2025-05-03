@@ -1,7 +1,5 @@
 import { type SetStateAction, useEffect, useState } from 'react'
 
-import { useSetAtom } from 'jotai'
-
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
@@ -16,7 +14,6 @@ import type { SelectableTask } from '@shared/types'
 import { ActionMenu } from '@renderer/components/ui'
 import { EditTaskPopover } from './edit-task-popover'
 import { AlertDialog } from '@renderer/components/ui/alert-dialog'
-import { currentTasksAtom } from '@renderer/store'
 
 interface Props extends SelectableTask {
   color: string
@@ -37,7 +34,6 @@ export function TaskCard({
 }: Props) {
   const [openAlertDialog, setOpenAlertDialog] = useState(false)
 
-  const currentTasks = useSetAtom(currentTasksAtom)
   const [isEditMode, setIsEditMode] = useState(false)
   const [name, setName] = useState(nameFromProps)
   const [description, setDescription] = useState(descriptionFromProps)
@@ -73,7 +69,7 @@ export function TaskCard({
       // find the task with the same id and change
       // the is_completed status
       // then reflect the changes on the ui
-      currentTasks((t) => {
+      setTasks((t) => {
         return t.map((task) => {
           if (task.id == id) {
             return {
@@ -95,7 +91,7 @@ export function TaskCard({
     // in the overlay for example
     // the state is not saved
     if (!isEditMode) {
-      currentTasks((prev) => {
+      setTasks((prev) => {
         return prev.map((task) => {
           if (task.id == id) {
             return {

@@ -3,8 +3,8 @@ import { BlendingModeIcon, CounterClockwiseClockIcon, CursorTextIcon } from '@ra
 import { EraserIcon, Flame, PenLineIcon } from 'lucide-react'
 import dayjs from 'dayjs'
 
-import { useSetAtom, useAtom } from 'jotai'
-import { habitsAtom, currentTasksAtom } from '@renderer/store'
+import { useSetAtom } from 'jotai'
+import { habitsAtom } from '@renderer/store'
 
 import { ActionMenu, Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
@@ -37,7 +37,7 @@ export function HabitDetailsModal({
 }: Props): JSX.Element | null {
   const [completionGraphMode, setCompletionGraphMode] = useState<'yearly' | 'monthly'>('monthly')
   const setHabits = useSetAtom(habitsAtom)
-  const [tasks, setTasks] = useAtom(currentTasksAtom)
+  const [tasks, setTasks] = useState<SelectableTask[]>([])
 
   const initialTasks = useRef<SelectableTask[]>([])
 

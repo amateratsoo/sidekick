@@ -7,7 +7,7 @@ import { db } from './database/controllers'
 import { InsertableHabit, InsertableTask, UpdateableHabit, UpdateableTask } from '@shared/types'
 
 // feature flags
-const blurred_window = false
+const blurred_window = true
 
 let mainWindow: BrowserWindow | null = null
 
