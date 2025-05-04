@@ -9,39 +9,51 @@ export async function create({
   name,
   description
 }: InsertableTask): Promise<SelectableTask | undefined> {
-  const task = await db
-    .insertInto('task')
-    .values({
-      habit_id,
-      id,
-      is_completed: is_completed ? 1 : 0,
-      name,
-      description
-    })
-    .returningAll()
-    .executeTakeFirst()
+  try {
+    const task = await db
+      .insertInto('task')
+      .values({
+        habit_id,
+        id,
+        is_completed: is_completed ? 1 : 0,
+        name,
+        description
+      })
+      .returningAll()
+      .executeTakeFirst()
 
-  if (!task) return undefined
+    if (!task) return undefined
 
-  return {
-    ...task,
-    is_completed: !!is_completed
+    return {
+      ...task,
+      is_completed: !!is_completed
+    }
+  } catch (error) {
+    throw error
   }
 }
 
 export async function findAllByHabitId(id: string): Promise<SelectableTask[]> {
-  const tasks = await db.selectFrom('task').where('habit_id', '=', id).selectAll().execute()
+  try {
+    const tasks = await db.selectFrom('task').where('habit_id', '=', id).selectAll().execute()
 
-  return tasks.map((task) => {
-    return {
-      ...task,
-      is_completed: !!task.is_completed
-    }
-  })
+    return tasks.map((task) => {
+      return {
+        ...task,
+        is_completed: !!task.is_completed
+      }
+    })
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function destroy(id: string) {
-  await db.deleteFrom('task').where('task.id', '=', id).execute()
+  try {
+    await db.deleteFrom('task').where('task.id', '=', id).execute()
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function update({
@@ -51,5 +63,9 @@ export async function update({
   id: string
   valuesToUpdate: UpdateableTask
 }): Promise<void> {
-  await db.updateTable('task').set(valuesToUpdate).where('id', '=', id).execute()
+  try {
+    await db.updateTable('task').set(valuesToUpdate).where('id', '=', id).execute()
+  } catch (error) {
+    throw error
+  }
 }

@@ -1,12 +1,20 @@
 import { type SetStateAction, useEffect, useRef, useState } from 'react'
-import { BlendingModeIcon, CounterClockwiseClockIcon, CursorTextIcon } from '@radix-ui/react-icons'
+import {
+  BlendingModeIcon,
+  BoxIcon,
+  CheckboxIcon,
+  CheckIcon,
+  CounterClockwiseClockIcon,
+  CursorTextIcon,
+  LinkBreak1Icon
+} from '@radix-ui/react-icons'
 import { EraserIcon, Flame, PenLineIcon } from 'lucide-react'
 import dayjs from 'dayjs'
 
 import { useSetAtom } from 'jotai'
 import { habitsAtom } from '@renderer/store'
 
-import { ActionMenu, Modal } from '@renderer/components/ui'
+import { ActionMenu, Button, Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
 import { TaskCard } from './task-card'
 import { CompletionGraph } from './completion-graph'
@@ -38,6 +46,7 @@ export function HabitDetailsModal({
   const [completionGraphMode, setCompletionGraphMode] = useState<'yearly' | 'monthly'>('monthly')
   const setHabits = useSetAtom(habitsAtom)
   const [tasks, setTasks] = useState<SelectableTask[]>([])
+  const [habitIsCompleted, setHabitIsCompleted] = useState(false)
 
   const initialTasks = useRef<SelectableTask[]>([])
 
@@ -142,6 +151,8 @@ export function HabitDetailsModal({
     onOpenChange(false)
   }
 
+  async function checkIfHabitIsDone() {}
+
   async function createTask() {
     const task = (await db.task.create({
       habit_id: id
@@ -171,6 +182,11 @@ export function HabitDetailsModal({
       }
     },
     { name: 'Aparência', icon: BlendingModeIcon, action: () => {} },
+    {
+      name: habitIsCompleted ? 'Desmarcar' : 'Marcar hábito',
+      icon: habitIsCompleted ? LinkBreak1Icon : CheckIcon,
+      action: () => checkIfHabitIsDone()
+    },
     {
       name: 'Apagar',
       icon: EraserIcon,

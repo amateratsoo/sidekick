@@ -11,7 +11,13 @@ export const api: Api = {
       create: (args) => ipcRenderer.invoke('db:habit:create', args),
       destroy: (id) => ipcRenderer.invoke('db:habit:destroy', id),
       update: (args) => ipcRenderer.invoke('db:habit:update', args),
-      findAllWithRelations: () => ipcRenderer.invoke('db:habit:find-all-with-relations')
+      findAllWithTasks: () => ipcRenderer.invoke('db:habit:find-all-with-tasks'),
+      findAllCompletedByHabitId: (habitId) =>
+        ipcRenderer.invoke('db:habit:find-all-completed-by-habit-id', habitId),
+      findCompletedByHabitId: (args) =>
+        ipcRenderer.invoke('db:habit:find-completed-by-habit-id', args),
+      check: (args) => ipcRenderer.invoke('db:habit:check', args),
+      uncheck: (args) => ipcRenderer.invoke('db:habit:uncheck', args)
     },
     task: {
       create: (args) => ipcRenderer.invoke('db:task:create', args),

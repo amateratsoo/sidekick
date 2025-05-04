@@ -5,9 +5,7 @@ export type Weekdays = 'segunda' | 'terça' | 'quarta' | 'quinta' | 'sexta' | 's
 export interface Schema {
   habit: HabitTable
   task: TaskTable
-  journal: JournalTable
-  completed_date: CompletedDateTable
-  habit_completed_date: Habit_CompletedDate_Table
+  completed_habit: CompletedHabitTable
 }
 
 export interface HabitTable {
@@ -30,23 +28,10 @@ interface TaskTable {
   created_at: ColumnType<Date, string | undefined, never>
 }
 
-// interface JournalTable {
-//   id: string
-//   title: string
-//   content: string | undefined
-//   habit_id: string
-//   created_at: ColumnType<Date, string | undefined, never>
-// }
-
-interface CompletedDateTable {
-  id: string
-  created_at: ColumnType<Date, string | undefined, never>
-}
-
-interface Habit_CompletedDate_Table {
-  id: string // [habit.id completed_date.id]
+interface CompletedHabitTable {
+  id: string // [habit.id completed_on]
   habit_id: string
-  completed_date_id: string
+  completed_on: string
   created_at: ColumnType<Date, string | undefined, never>
 }
 
@@ -60,14 +45,6 @@ export type SelectableTask = Selectable<TaskTable>
 export type InsertableTask = Insertable<TaskTable>
 export type UpdateableTask = Updateable<TaskTable>
 
-// export type SelectableJournal = Selectable<JournalTable>
-// export type InsertableJournal = Insertable<JournalTable>
-// export type UpdateableJournal = Updateable<JournalTable>
-
-export type SelectableCompletedDate = Selectable<CompletedDateTable>
-export type InsertableCompletedDate = Insertable<CompletedDateTable>
-export type UpdateableCompletedDate = Updateable<CompletedDateTable>
-
-export type SelectableHabit_CompletedDate_Table = Selectable<Habit_CompletedDate_Table>
-export type InsertableHabit_CompletedDate_Table = Insertable<Habit_CompletedDate_Table>
-export type UpdateableHabit_CompletedDate_Table = Updateable<Habit_CompletedDate_Table>
+export type SelectableCompletedHabit = Selectable<CompletedHabitTable>
+export type InsertableCompletedHabit = Insertable<CompletedHabitTable>
+export type UpdateableCompletedHabit = Updateable<CompletedHabitTable>

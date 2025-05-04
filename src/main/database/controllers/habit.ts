@@ -1,4 +1,5 @@
 import { jsonArrayFrom } from 'kysely/helpers/sqlite'
+import dayjs from 'dayjs'
 
 import { db } from '../db'
 import type { InsertableHabit, SelectableHabit, SelectableTask, UpdateableHabit } from '../schema'
@@ -13,74 +14,84 @@ export async function create({
   name,
   description = ''
 }: InsertableHabit): Promise<SelectableHabit | undefined> {
-  const habit = await db
-    .insertInto('habit')
-    .values({
-      id,
-      badge,
-      color,
-      frequency,
-      name,
-      streak,
-      description
-    })
-    .returningAll()
-    .executeTakeFirst()
+  try {
+    const habit = await db
+      .insertInto('habit')
+      .values({
+        id,
+        badge,
+        color,
+        frequency,
+        name,
+        streak,
+        description
+      })
+      .returningAll()
+      .executeTakeFirst()
 
-  if (!habit) return undefined
-
-  return habit
+    return habit
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function findAll(): Promise<SelectableHabit[]> {
-  const habits = await db.selectFrom('habit').selectAll().execute()
+  try {
+    const habits = await db.selectFrom('habit').selectAll().execute()
 
-  return habits.map((habit) => {
-    return {
-      ...habit,
-      frequency: JSON.parse(String(habit.frequency))
-    }
-  })
+    return habits.map((habit) => {
+      return {
+        ...habit,
+        frequency: JSON.parse(String(habit.frequency))
+      }
+    })
+  } catch (error) {
+    throw error
+  }
 }
 
-export async function findAllWithRelations(): Promise<SelectableHabit[]> {
-  const query = await db
-    .selectFrom('habit')
-    .selectAll()
-    .select((eb) => [
-      // tasks
-      jsonArrayFrom(
-        eb
-          .selectFrom('task')
-          .select([
-            'task.id',
-            'task.name',
-            'task.is_completed',
-            'task.habit_id',
-            'task.description',
-            'task.created_at'
-          ])
-          .whereRef('task.habit_id', '=', 'habit.id')
-      ).as('tasks')
-    ])
-    .execute()
+export async function findAllWithTasks(): Promise<SelectableHabit[]> {
+  try {
+    const query = await db
+      .selectFrom('habit')
+      .selectAll()
+      .select((eb) => [
+        // tasks
+        jsonArrayFrom(
+          eb
+            .selectFrom('task')
+            .select([
+              'task.id',
+              'task.name',
+              'task.is_completed',
+              'task.habit_id',
+              'task.description',
+              'task.created_at'
+            ])
+            .whereRef('task.habit_id', '=', 'habit.id')
+        ).as('tasks')
+      ])
+      .execute()
 
-  /* 
+    /* 
     kysely relations recipe returns children as text
     and not json, so we need to parse and return
     each one of the children 
   */
-  return query.map((row) => {
-    return {
-      ...row,
-      tasks: JSON.parse(String(row.tasks)).map((task: SelectableTask) => {
-        return {
-          ...task,
-          is_completed: !!task.is_completed
-        }
-      }) as SelectableTask[]
-    }
-  })
+    return query.map((row) => {
+      return {
+        ...row,
+        tasks: JSON.parse(String(row.tasks)).map((task: SelectableTask) => {
+          return {
+            ...task,
+            is_completed: !!task.is_completed
+          }
+        }) as SelectableTask[]
+      }
+    })
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function destroy(id: string): Promise<void> {
@@ -94,5 +105,69 @@ export async function update({
   id: string
   valuesToUpdate: UpdateableHabit
 }): Promise<void> {
-  await db.updateTable('habit').set(valuesToUpdate).where('id', '=', id).execute()
+  try {
+    await db.updateTable('habit').set(valuesToUpdate).where('id', '=', id).execute()
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function findCompletedByHabitId({
+  habitId,
+  date = dayjs().format('DD/MM/YYYY')
+}: {
+  habitId: string
+  date?: string
+}) {
+  try {
+    return await db
+      .selectFrom('completed_habit')
+      .selectAll()
+      .where('habit_id', '=', habitId)
+      .where('completed_on', '=', date)
+      .executeTakeFirst()
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function findAllCompletedByHabitId(habitId: string) {
+  try {
+    return await db
+      .selectFrom('completed_habit')
+      .selectAll()
+      .where('habit_id', '=', habitId)
+      .execute()
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function check({
+  habitId,
+  date = dayjs().format('DD/MM/YYYY')
+}: {
+  habitId: string
+  date?: string
+}) {
+  try {
+    await db
+      .insertInto('completed_habit')
+      .values({
+        id: `${habitId}-${date}`,
+        habit_id: habitId,
+        completed_on: date
+      })
+      .execute()
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function uncheck({ habitId, date }: { habitId: string; date?: string }) {
+  try {
+    await db.deleteFrom('completed_habit').where('id', '=', `${habitId}-${date}`).execute()
+  } catch (error) {
+    throw error
+  }
 }

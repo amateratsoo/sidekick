@@ -5,7 +5,7 @@ import { cn } from '@renderer/utils'
 
 export interface Action {
   name: string
-  icon: ElementType
+  icon?: ElementType
   action: () => void
   className?: string
 }
@@ -63,7 +63,7 @@ export function ActionMenu({
                 className="flex gap-2.5 cursor-pointer w-full h-full p-1 px-1.5"
               >
                 <div className="rounded-md grid place-items-center h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800">
-                  <Icon className="size-3.5" />
+                  {Icon ? <Icon className="size-3.5" /> : <div className="size-3.5" />}
                 </div>
 
                 <span>{action.name}</span>

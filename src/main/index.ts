@@ -7,7 +7,7 @@ import { db } from './database/controllers'
 import { InsertableHabit, InsertableTask, UpdateableHabit, UpdateableTask } from '@shared/types'
 
 // feature flags
-const blurred_window = true
+const blurred_window = false
 
 let mainWindow: BrowserWindow | null = null
 
@@ -73,16 +73,29 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC
+  /*********************************************************
+   *
+   *  IPC handlers
+   *
+   *********************************************************/
 
-  // db endpoints
+  /**
+   * *******************
+   *
+   * db endpoints
+   *
+   * *******************
+   */
 
-  // habit
+  /**
+   * *******************
+   *
+   * ✍️ habit
+   *
+   * *******************
+   */
   ipcMain.handle('db:habit:find-all', async () => await db.habit.findAll())
-  ipcMain.handle(
-    'db:habit:find-all-with-relations',
-    async () => await db.habit.findAllWithRelations()
-  )
+  ipcMain.handle('db:habit:find-all-with-tasks', async () => await db.habit.findAllWithTasks())
   ipcMain.handle('db:habit:create', async (_, args: InsertableHabit) => await db.habit.create(args))
   ipcMain.handle('db:habit:destroy', async (_, id: string) => await db.habit.destroy(id))
   ipcMain.handle(
@@ -95,8 +108,49 @@ app.whenReady().then(() => {
       }
     ) => await db.habit.update(args)
   )
+  ipcMain.handle('db:habit:find-all-with-tasks', async () => await db.habit.findAllWithTasks())
+  ipcMain.handle(
+    'db:habit:find-all-completed-by-habit-id',
+    async (_, habitId: string) => await db.habit.findAllCompletedByHabitId(habitId)
+  )
+  ipcMain.handle(
+    'db:habit:find-completed-by-habit-id',
+    async (
+      _,
+      args: {
+        habitId: string
+        date?: string
+      }
+    ) => await db.habit.findCompletedByHabitId(args)
+  )
+  ipcMain.handle(
+    'db:habit:check',
+    async (
+      _,
+      args: {
+        habitId: string
+        date?: string
+      }
+    ) => await db.habit.check(args)
+  )
+  ipcMain.handle(
+    'db:habit:uncheck',
+    async (
+      _,
+      args: {
+        habitId: string
+        date?: string
+      }
+    ) => await db.habit.uncheck(args)
+  )
 
-  // task
+  /**
+   * *******************
+   *
+   * ✅ tasks
+   *
+   * *******************
+   */
   ipcMain.handle('db:task:create', async (_, args: InsertableTask) => await db.task.create(args))
   ipcMain.handle(
     'db:task:find-all-by-habit-id',
@@ -114,7 +168,13 @@ app.whenReady().then(() => {
     ) => await db.task.update(args)
   )
 
-  // window title bar buttons
+  /**
+   * *******************
+   *
+   * window title bar buttons
+   *
+   * *******************
+   */
   ipcMain.handle('window:close', () => mainWindow?.close())
   ipcMain.handle('window:maximize', () => {
     if (mainWindow?.isMaximized()) {
