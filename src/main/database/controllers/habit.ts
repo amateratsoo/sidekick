@@ -171,3 +171,35 @@ export async function uncheck({ habitId, date }: { habitId: string; date?: strin
     throw error
   }
 }
+
+// to separate domains and get intellisense support
+export const streak = {
+  increase: async ({ habitId, amount = 1 }: { habitId: string; amount?: number }) => {
+    try {
+      const currentStreak =
+        (
+          await db
+            .selectFrom('habit')
+            .select(['streak'])
+            .where('id', '=', habitId)
+            .executeTakeFirst()
+        )?.streak || 0
+
+      await db
+        .updateTable('habit')
+        .set({ streak: currentStreak + amount })
+        .where('id', '=', habitId)
+        .execute()
+    } catch (error) {
+      throw error
+    }
+  },
+
+  reset: async (habitId: string) => {
+    try {
+      await db.updateTable('habit').set({ streak: 0 }).where('id', '=', habitId).execute()
+    } catch (error) {
+      throw error
+    }
+  }
+}

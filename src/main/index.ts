@@ -108,7 +108,6 @@ app.whenReady().then(() => {
       }
     ) => await db.habit.update(args)
   )
-  ipcMain.handle('db:habit:find-all-with-tasks', async () => await db.habit.findAllWithTasks())
   ipcMain.handle(
     'db:habit:find-all-completed-by-habit-id',
     async (_, habitId: string) => await db.habit.findAllCompletedByHabitId(habitId)
@@ -142,6 +141,14 @@ app.whenReady().then(() => {
         date?: string
       }
     ) => await db.habit.uncheck(args)
+  )
+  ipcMain.handle(
+    'db:habit:streak:increase',
+    async (_, args) => await db.habit.streak.increase(args)
+  )
+  ipcMain.handle(
+    'db:habit:streak:reset',
+    async (_, habitId: string) => await db.habit.streak.reset(habitId)
   )
 
   /**

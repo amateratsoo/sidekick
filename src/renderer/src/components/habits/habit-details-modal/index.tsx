@@ -183,11 +183,6 @@ export function HabitDetailsModal({
     },
     { name: 'Aparência', icon: BlendingModeIcon, action: () => {} },
     {
-      name: habitIsCompleted ? 'Desmarcar' : 'Marcar hábito',
-      icon: habitIsCompleted ? LinkBreak1Icon : CheckIcon,
-      action: () => checkIfHabitIsDone()
-    },
-    {
       name: 'Apagar',
       icon: EraserIcon,
       action: () => {
@@ -209,27 +204,37 @@ export function HabitDetailsModal({
     >
       <header className="w-full -mt-6 flex items-center gap-2">
         <div className="rounded-lg p-2 bg-zinc-900/60 text-2xl aspect-square">{badge}</div>
-        <div className="-space-y-1.5 text-left">
+        <div className="-space-y-1.5 text-left w-full">
           <span className="block text-zinc-500/20 text-lg font-bold font-serif">Eu vou</span>
-          <div className="group flex">
-            <p className="text-zinc-300 font-bold font-sans text-xl line-clamp-1">{nameValue}</p>
-            <ActionMenu
-              actions={actions}
-              icon={PenLineIcon}
-              side="bottom"
-              triggerClassName="hidden group-hover:grid place-items-center"
-            />
+          <div className="flex">
+            <div className="group flex">
+              <p className="text-zinc-300 font-bold font-sans text-xl line-clamp-1">{nameValue}</p>
+              <ActionMenu
+                actions={actions}
+                icon={PenLineIcon}
+                side="bottom"
+                triggerClassName="hidden group-hover:grid place-items-center"
+              />
 
-            <EditHabitPopover
-              badge={badge}
-              setBadge={setBadge}
-              description={description!}
-              setDescription={setDescription}
-              isEditMode={isEditMode}
-              setIsEditMode={setIsEditMode}
-              name={name}
-              setName={setName}
-            />
+              <EditHabitPopover
+                badge={badge}
+                setBadge={setBadge}
+                description={description!}
+                setDescription={setDescription}
+                isEditMode={isEditMode}
+                setIsEditMode={setIsEditMode}
+                name={name}
+                setName={setName}
+              />
+            </div>
+
+            <button
+              title={`${habitIsCompleted ? 'desmarcar' : 'marcar'} tarefa`}
+              className="rounded-lg ring-2 ring-zinc-700 cursor-pointer size-6 ml-auto"
+              onClick={() => setHabitIsCompleted((prev) => !prev)}
+            >
+              {habitIsCompleted && <div className="bg-zinc-700 rounded size-4 m-auto" />}
+            </button>
           </div>
         </div>
       </header>

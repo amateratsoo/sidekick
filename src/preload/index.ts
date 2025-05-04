@@ -17,7 +17,11 @@ export const api: Api = {
       findCompletedByHabitId: (args) =>
         ipcRenderer.invoke('db:habit:find-completed-by-habit-id', args),
       check: (args) => ipcRenderer.invoke('db:habit:check', args),
-      uncheck: (args) => ipcRenderer.invoke('db:habit:uncheck', args)
+      uncheck: (args) => ipcRenderer.invoke('db:habit:uncheck', args),
+      streak: {
+        increase: (args) => ipcRenderer.invoke('db:habit:streak:increase', args),
+        reset: (habitId) => ipcRenderer.invoke('db:habit:streak:reset', habitId)
+      }
     },
     task: {
       create: (args) => ipcRenderer.invoke('db:task:create', args),
