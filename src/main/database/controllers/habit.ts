@@ -120,12 +120,12 @@ export async function findCompletedByHabitId({
   date?: string
 }) {
   try {
-    return await db
+    return !!(await db
       .selectFrom('completed_habit')
       .selectAll()
       .where('habit_id', '=', habitId)
       .where('completed_on', '=', date)
-      .executeTakeFirst()
+      .executeTakeFirst())
   } catch (error) {
     throw error
   }
@@ -198,6 +198,27 @@ export const streak = {
   reset: async (habitId: string) => {
     try {
       await db.updateTable('habit').set({ streak: 0 }).where('id', '=', habitId).execute()
+    } catch (error) {
+      throw error
+    }
+  },
+
+  decrease: async ({ habitId, amount = 1 }: { habitId: string; amount?: number }) => {
+    try {
+      const currentStreak =
+        (
+          await db
+            .selectFrom('habit')
+            .select(['streak'])
+            .where('id', '=', habitId)
+            .executeTakeFirst()
+        )?.streak || 0
+
+      await db
+        .updateTable('habit')
+        .set({ streak: currentStreak - amount })
+        .where('id', '=', habitId)
+        .execute()
     } catch (error) {
       throw error
     }

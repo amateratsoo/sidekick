@@ -20,6 +20,7 @@ export const api: Api = {
       uncheck: (args) => ipcRenderer.invoke('db:habit:uncheck', args),
       streak: {
         increase: (args) => ipcRenderer.invoke('db:habit:streak:increase', args),
+        decrease: (args) => ipcRenderer.invoke('db:habit:streak:decrease', args),
         reset: (habitId) => ipcRenderer.invoke('db:habit:streak:reset', habitId)
       }
     },

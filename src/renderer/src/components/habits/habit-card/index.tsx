@@ -20,7 +20,7 @@ const d = [
 
 export function HabitCard({ name, badge }: SelectableHabit): JSX.Element {
   return (
-    <div className="border border-zinc-900 bg-zinc-900/20 rounded-lg min-h-36 flex flex-col items-center justify-center p-1">
+    <div className="border border-zinc-900 bg-zinc-900/20 rounded-xl min-h-36 flex flex-col items-center justify-center p-1">
       <header className="w-full p-2 flex items-center gap-2">
         <div className="rounded-lg p-2 bg-zinc-900/60 text-xl aspect-square">{badge}</div>
         <div className="-space-y-1.5 text-left">

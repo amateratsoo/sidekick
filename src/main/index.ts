@@ -147,6 +147,10 @@ app.whenReady().then(() => {
     async (_, args) => await db.habit.streak.increase(args)
   )
   ipcMain.handle(
+    'db:habit:streak:decrease',
+    async (_, args) => await db.habit.streak.decrease(args)
+  )
+  ipcMain.handle(
     'db:habit:streak:reset',
     async (_, habitId: string) => await db.habit.streak.reset(habitId)
   )

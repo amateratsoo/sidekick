@@ -45,7 +45,7 @@ export function Modal({
         )}
         <Dialog.Content
           className={cn(
-            'fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-lg -p-[25px] border border-zinc-900 bg-zinc-950 focus:outline-none data-[state=open]:animate-contentShow',
+            'fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-xl -p-[25px] border border-zinc-900 bg-zinc-950 focus:outline-none data-[state=open]:animate-contentShow',
             className
           )}
         >

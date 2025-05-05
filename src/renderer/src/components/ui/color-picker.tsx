@@ -346,7 +346,7 @@ const ColorPicker = ({
               '--thumb-ring-color': '#666666'
             } as React.CSSProperties
           }
-          className="z-30 flex max-w-[300px] select-none flex-col items-center gap-3 overscroll-none border p-2 border-zinc-900 bg-zinc-900/20 rounded-lg w-64 shadow-2xl shadow-zinc-900/40"
+          className="z-30 flex max-w-[300px] select-none flex-col items-center gap-3 overscroll-none border p-2 border-zinc-900 bg-zinc-900/20 rounded-xl w-64 shadow-2xl shadow-zinc-900/40"
         >
           <DraggableColorCanvas
             {...color}

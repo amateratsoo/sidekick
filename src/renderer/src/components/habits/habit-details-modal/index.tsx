@@ -66,6 +66,11 @@ export function HabitDetailsModal({
   useEffect(() => {
     ;(async () => {
       const tasks = await db.task.findAllByHabitId(id)
+      const habitIsCompleted = await db.habit.findCompletedByHabitId({
+        habitId: id
+      })
+
+      setHabitIsCompleted(habitIsCompleted)
       setTasks(tasks)
       initialTasks.current = tasks
 
@@ -151,7 +156,7 @@ export function HabitDetailsModal({
     onOpenChange(false)
   }
 
-  async function checkIfHabitIsDone() {}
+  async function toggleHabit() {}
 
   async function createTask() {
     const task = (await db.task.create({
@@ -230,10 +235,10 @@ export function HabitDetailsModal({
 
             <button
               title={`${habitIsCompleted ? 'desmarcar' : 'marcar'} tarefa`}
-              className="rounded-lg ring-2 ring-zinc-700 cursor-pointer size-6 ml-auto"
+              className="rounded-lg ring-2 ring-zinc-600 cursor-pointer size-6 ml-auto -mt-1.5"
               onClick={() => setHabitIsCompleted((prev) => !prev)}
             >
-              {habitIsCompleted && <div className="bg-zinc-700 rounded size-4 m-auto" />}
+              {habitIsCompleted && <div className="bg-zinc-600 rounded size-4 m-auto" />}
             </button>
           </div>
         </div>

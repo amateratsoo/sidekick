@@ -25,7 +25,7 @@ export function Input({
           }
         }}
         className={cn(
-          'bg-zinc-900/15 py-2.5 pl-2.5 ring-1 ring-zinc-800 text-zinc-300 outline-none focus-within:ring-zinc-300 rounded-md w-full mt-3',
+          'bg-zinc-900/15 py-2.5 pl-2.5 ring-1 ring-zinc-800 text-zinc-300 outline-none focus-within:ring-zinc-300 rounded-lg w-full mt-3',
           className,
           {
             'ring-red-500': showError
