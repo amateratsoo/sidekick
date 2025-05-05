@@ -29,7 +29,7 @@ export function HabitCard({ name, badge }: SelectableHabit): JSX.Element {
         </div>
       </header>
 
-      <div className="grid grid-cols-7 col-end-7 gap-y-1.5 w-full p-2">
+      <div className="grid grid-cols-7 col-end-7 gap-y-1.5 w-full p-2 pt-[5px]">
         {weekdays.map((day) => {
           return (
             <p className="text-zinc-500/40 font-serif text-lg text-center font-semibold" key={day}>

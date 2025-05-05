@@ -100,7 +100,7 @@ export function TaskCard({
               habit_id,
               id,
               is_completed,
-              name
+              name: nameValue // when the user left the field we will populate with the last written name
             }
           }
 

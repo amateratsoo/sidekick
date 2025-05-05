@@ -112,7 +112,7 @@ export async function update({
   }
 }
 
-export async function findCompletedByHabitId({
+export async function isComplited({
   habitId,
   date = dayjs().format('DD/MM/YYYY')
 }: {
@@ -131,7 +131,7 @@ export async function findCompletedByHabitId({
   }
 }
 
-export async function findAllCompletedByHabitId(habitId: string) {
+export async function findAllCompleted(habitId: string) {
   try {
     return await db
       .selectFrom('completed_habit')
@@ -154,7 +154,6 @@ export async function check({
     await db
       .insertInto('completed_habit')
       .values({
-        id: `${habitId}-${date}`,
         habit_id: habitId,
         completed_on: date
       })
@@ -164,9 +163,19 @@ export async function check({
   }
 }
 
-export async function uncheck({ habitId, date }: { habitId: string; date?: string }) {
+export async function uncheck({
+  habitId,
+  date = dayjs().format('DD/MM/YYYY')
+}: {
+  habitId: string
+  date?: string
+}) {
   try {
-    await db.deleteFrom('completed_habit').where('id', '=', `${habitId}-${date}`).execute()
+    await db
+      .deleteFrom('completed_habit')
+      .where('habit_id', '=', habitId)
+      .where('completed_on', '=', date)
+      .execute()
   } catch (error) {
     throw error
   }
@@ -214,11 +223,9 @@ export const streak = {
             .executeTakeFirst()
         )?.streak || 0
 
-      await db
-        .updateTable('habit')
-        .set({ streak: currentStreak - amount })
-        .where('id', '=', habitId)
-        .execute()
+      const streak = Math.max(currentStreak - amount, 0)
+
+      await db.updateTable('habit').set({ streak: streak }).where('id', '=', habitId).execute()
     } catch (error) {
       throw error
     }

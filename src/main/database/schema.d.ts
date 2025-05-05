@@ -29,7 +29,8 @@ interface TaskTable {
 }
 
 interface CompletedHabitTable {
-  id: string // [habit.id completed_on]
+  // the id is a compund primary key [habit.id completed_on]
+  // so we don't need to specify it
   habit_id: string
   completed_on: string
   created_at: ColumnType<Date, string | undefined, never>

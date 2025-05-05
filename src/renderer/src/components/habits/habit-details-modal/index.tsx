@@ -1,4 +1,4 @@
-import { type SetStateAction, useEffect, useRef, useState } from 'react'
+import { CSSProperties, type SetStateAction, useEffect, useRef, useState } from 'react'
 import {
   BlendingModeIcon,
   BoxIcon,
@@ -48,6 +48,8 @@ export function HabitDetailsModal({
   const [tasks, setTasks] = useState<SelectableTask[]>([])
   const [habitIsCompleted, setHabitIsCompleted] = useState(false)
 
+  const initialHabitIsCompleted = useRef<boolean>()
+  const completedHabitDates = useRef<string[]>([])
   const initialTasks = useRef<SelectableTask[]>([])
 
   const [loading, setLoading] = useState(true)
@@ -66,11 +68,16 @@ export function HabitDetailsModal({
   useEffect(() => {
     ;(async () => {
       const tasks = await db.task.findAllByHabitId(id)
-      const habitIsCompleted = await db.habit.findCompletedByHabitId({
+
+      // check if habit is completed to render the habit checkbox status
+      const habitIsCompleted = await db.habit.isComplited({
         habitId: id
       })
 
+      completedHabitDates.current = (await db.habit.findAllCompleted(id)).map((x) => x.completed_on)
+
       setHabitIsCompleted(habitIsCompleted)
+      initialHabitIsCompleted.current = habitIsCompleted
       setTasks(tasks)
       initialTasks.current = tasks
 
@@ -147,6 +154,26 @@ export function HabitDetailsModal({
           })
         })
       }
+
+      // check if habit is completed for the day
+      // and then save
+      ;(async () => {
+        if (initialHabitIsCompleted.current != habitIsCompleted) {
+          if (habitIsCompleted) {
+            await db.habit.check({ habitId: id })
+            await db.habit.streak.increase({ habitId: id })
+
+            return
+          }
+
+          // todo (05/05/2025): implement a check to see
+          // if it's day to do the habit
+          await db.habit.uncheck({ habitId: id })
+          await db.habit.streak.decrease({
+            habitId: id
+          })
+        }
+      })()
     }
   }, [open])
 
@@ -156,7 +183,19 @@ export function HabitDetailsModal({
     onOpenChange(false)
   }
 
-  async function toggleHabit() {}
+  function toggleHabit() {
+    if (!habitIsCompleted) {
+      completedHabitDates.current = [...completedHabitDates.current, dayjs().format('DD/MM/YYYY')]
+      streak.current += 1
+      setHabitIsCompleted(true)
+
+      return
+    }
+
+    completedHabitDates.current.pop()
+    streak.current -= 1
+    setHabitIsCompleted(false)
+  }
 
   async function createTask() {
     const task = (await db.task.create({
@@ -234,11 +273,20 @@ export function HabitDetailsModal({
             </div>
 
             <button
+              data-habit-is-completed={habitIsCompleted}
+              // change this with a proper tooltip
               title={`${habitIsCompleted ? 'desmarcar' : 'marcar'} tarefa`}
-              className="rounded-lg ring-2 ring-zinc-600 cursor-pointer size-6 ml-auto -mt-1.5"
-              onClick={() => setHabitIsCompleted((prev) => !prev)}
+              className="rounded-lg ring-2 cursor-pointer size-6 ml-auto -mt-1"
+              style={
+                {
+                  '--tw-ring-color': habitIsCompleted ? color : 'var(--color-zinc-600)'
+                } as CSSProperties
+              }
+              onClick={toggleHabit}
             >
-              {habitIsCompleted && <div className="bg-zinc-600 rounded size-4 m-auto" />}
+              {habitIsCompleted && (
+                <div className="rounded size-4 m-auto" style={{ backgroundColor: color }} />
+              )}
             </button>
           </div>
         </div>
@@ -281,7 +329,11 @@ export function HabitDetailsModal({
               </button>
             </div>
           </div>
-          <CompletionGraph mode={completionGraphMode} />
+          <CompletionGraph
+            mode={completionGraphMode}
+            completedHabitDates={completedHabitDates.current}
+            color={color}
+          />
         </section>
         <section className="mt-2">
           <h2 className="text-zinc-300 font-sans font-semibold text-xl mb-4">Tarefas</h2>

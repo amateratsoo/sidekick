@@ -109,18 +109,18 @@ app.whenReady().then(() => {
     ) => await db.habit.update(args)
   )
   ipcMain.handle(
-    'db:habit:find-all-completed-by-habit-id',
-    async (_, habitId: string) => await db.habit.findAllCompletedByHabitId(habitId)
+    'db:habit:find-all-completed',
+    async (_, habitId: string) => await db.habit.findAllCompleted(habitId)
   )
   ipcMain.handle(
-    'db:habit:find-completed-by-habit-id',
+    'db:habit:is-completed',
     async (
       _,
       args: {
         habitId: string
         date?: string
       }
-    ) => await db.habit.findCompletedByHabitId(args)
+    ) => await db.habit.isComplited(args)
   )
   ipcMain.handle(
     'db:habit:check',

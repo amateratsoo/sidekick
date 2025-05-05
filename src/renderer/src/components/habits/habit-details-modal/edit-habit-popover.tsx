@@ -26,8 +26,8 @@ export function EditHabitPopover({
     <Popover
       open={isEditMode}
       onOpenChange={setIsEditMode}
-      align="start"
-      side="bottom"
+      align="center"
+      side="top"
       sideOffset={10}
     >
       <div className="rounded-lg bg-zinc-950 border border-zinc-900 shadow-zinc-900/40 shadow-2xl w-80 h-fit flex">

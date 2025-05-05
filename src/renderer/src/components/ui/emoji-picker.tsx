@@ -6,7 +6,7 @@ import type { PopoverContentProps } from '@radix-ui/react-popover'
 import { cn } from '@renderer/utils'
 
 interface Props extends PopoverContentProps {
-  onEmojiSelect: (state: SetStateAction<string | undefined>) => void
+  onEmojiSelect: (state: SetStateAction<string>) => void
   children: ReactNode
 }
 

@@ -10,6 +10,7 @@ import { Modal, Input, Button } from '@renderer/components/ui'
 import { HabitFrequency } from './habit-frequency'
 import { HabitBadge } from './habit-badge'
 import { HabitColor } from './habit-color'
+import { Feather } from 'lucide-react'
 
 const { db } = window.api
 
@@ -76,7 +77,12 @@ export function CreateHabitModal(): JSX.Element {
       open={openModal}
       onOpenChange={setOpenModal}
       title="Criar novo hábito"
-      trigger={<Button className="bg-green-500">novo hábito</Button>}
+      trigger={
+        <Button className="bg-green-500 flex items-center justify-center gap-1">
+          <Feather className="size-3.5" />
+          novo hábito
+        </Button>
+      }
     >
       <form onSubmit={createHabit}>
         <div>
