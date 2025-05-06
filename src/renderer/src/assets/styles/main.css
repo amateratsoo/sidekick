@@ -52,6 +52,9 @@ div[class='flex flex-col items-center justify-center py-12 px-4 w-full'] > div >
   &:hover {
     @apply bg-zinc-900;
   }
+  &:focus {
+    @apply bg-zinc-900;
+  }
 }
 
 /* div:has(> div[data-testid='emoji-picker-list-header']) {

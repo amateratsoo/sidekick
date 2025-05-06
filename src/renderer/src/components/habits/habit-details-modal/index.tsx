@@ -1,20 +1,12 @@
-import { CSSProperties, type SetStateAction, useEffect, useRef, useState } from 'react'
-import {
-  BlendingModeIcon,
-  BoxIcon,
-  CheckboxIcon,
-  CheckIcon,
-  CounterClockwiseClockIcon,
-  CursorTextIcon,
-  LinkBreak1Icon
-} from '@radix-ui/react-icons'
+import { type CSSProperties, type SetStateAction, useEffect, useRef, useState } from 'react'
+import { BlendingModeIcon, CounterClockwiseClockIcon, CursorTextIcon } from '@radix-ui/react-icons'
 import { EraserIcon, Flame, PenLineIcon } from 'lucide-react'
 import dayjs from 'dayjs'
 
 import { useSetAtom } from 'jotai'
 import { habitsAtom } from '@renderer/store'
 
-import { ActionMenu, Button, Modal } from '@renderer/components/ui'
+import { ActionMenu, Modal } from '@renderer/components/ui'
 import { cn } from '@renderer/utils'
 import { TaskCard } from './task-card'
 import { CompletionGraph } from './completion-graph'
@@ -61,6 +53,8 @@ export function HabitDetailsModal({
   const [badge, setBadge] = useState(badgeFromProps)
   const [color, setColor] = useState(colorFromProps)
 
+  // use this to render the initial name value
+  // when the controlled input is empty
   const nameValue = name!.length > 0 ? name : nameFromProps
 
   const streak = useRef(StreakFromProps)
@@ -74,7 +68,7 @@ export function HabitDetailsModal({
         habitId: id
       })
 
-      completedHabitDates.current = (await db.habit.findAllCompleted(id)).map((x) => x.completed_on)
+      completedHabitDates.current = (await db.habit.findAllCompleted(id)).map((h) => h.completed_on)
 
       setHabitIsCompleted(habitIsCompleted)
       initialHabitIsCompleted.current = habitIsCompleted
@@ -89,7 +83,6 @@ export function HabitDetailsModal({
     // when closing
     if (!open && name) {
       // save habits only if something changed
-
       if (
         nameFromProps != name ||
         badgeFromProps != badge ||
@@ -155,10 +148,12 @@ export function HabitDetailsModal({
         })
       }
 
-      // check if habit is completed for the day
-      // and then save
-      ;(async () => {
-        if (initialHabitIsCompleted.current != habitIsCompleted) {
+      // check if habit is completed
+      // for the day and then save
+      if (initialHabitIsCompleted.current != habitIsCompleted) {
+        ;(async () => {
+          initialHabitIsCompleted.current = habitIsCompleted
+
           if (habitIsCompleted) {
             await db.habit.check({ habitId: id })
             await db.habit.streak.increase({ habitId: id })
@@ -172,8 +167,8 @@ export function HabitDetailsModal({
           await db.habit.streak.decrease({
             habitId: id
           })
-        }
-      })()
+        })()
+      }
     }
   }, [open])
 
@@ -252,10 +247,12 @@ export function HabitDetailsModal({
           <span className="block text-zinc-500/20 text-lg font-bold font-serif">Eu vou</span>
           <div className="flex">
             <div className="group flex">
-              <p className="text-zinc-300 font-bold font-sans text-xl line-clamp-1">{nameValue}</p>
+              <p className="text-zinc-300 font-bold font-sans text-xl w-fit max-w-80 truncate --line-clamp-1">
+                {nameValue}
+              </p>
               <ActionMenu
                 actions={actions}
-                icon={PenLineIcon}
+                trigger={<PenLineIcon className="size-3.5" />}
                 side="bottom"
                 triggerClassName="hidden group-hover:grid place-items-center"
               />

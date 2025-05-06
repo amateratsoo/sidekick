@@ -1,4 +1,4 @@
-import type { ElementType } from 'react'
+import type { ElementType, ReactNode, SetStateAction } from 'react'
 import type { PopoverContentProps } from '@radix-ui/react-popover'
 import { Popover } from './popover'
 import { cn } from '@renderer/utils'
@@ -12,21 +12,25 @@ export interface Action {
 
 interface Props extends PopoverContentProps {
   actions: Action[]
-  icon?: ElementType
-  iconClassName?: string
+  trigger?: ReactNode
   triggerClassName?: string
+  open?: boolean
+  onOpenChange?: (state: SetStateAction<boolean>) => void
 }
 
 export function ActionMenu({
   actions,
-  icon: Icon,
+  trigger: Trigger,
   className,
   triggerClassName,
-  iconClassName,
+  open,
+  onOpenChange,
   ...props
 }: Props) {
   return (
     <Popover
+      open={open}
+      onOpenChange={onOpenChange}
       align="center"
       side="top"
       sideOffset={10}
@@ -37,7 +41,7 @@ export function ActionMenu({
             triggerClassName
           )}
         >
-          {Icon && <Icon className={cn('size-3.5', iconClassName)} />}
+          {Trigger}
         </button>
       }
       className={cn(
@@ -62,9 +66,13 @@ export function ActionMenu({
                 onClick={action.action}
                 className="flex gap-2.5 cursor-pointer w-full h-full p-1 px-1.5"
               >
-                <div className="rounded-md grid place-items-center h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800">
-                  {Icon ? <Icon className="size-3.5" /> : <div className="size-3.5" />}
-                </div>
+                {Icon ? (
+                  <div className="rounded-md grid place-items-center h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800">
+                    <Icon className="size-3.5" />
+                  </div>
+                ) : (
+                  <div />
+                )}
 
                 <span>{action.name}</span>
               </button>

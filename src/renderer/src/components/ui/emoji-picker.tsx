@@ -28,6 +28,7 @@ export function EmojiPicker({ onEmojiSelect, children, className, ...props }: Pr
       >
         <Picker.Header className="p-2 pb-1">
           <Picker.Input
+            hideIcon={true}
             type="text"
             placeholder="filtrar emojis"
             autoFocus={true}
