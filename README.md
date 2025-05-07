@@ -2,7 +2,7 @@
 
 <br />
 
-<h1> Sidekick <img src='./resources/Icon.png' width=28 /> </h1>
+<h1> Sidekick <img src='./resources/icon.png' width=28 /> </h1>
 
 <p align="center">
 🚀 <b>Modern</b>, ⚡ <b>Sleek</b>, and 🪄 <b>Fully Customizable</b> habit tracker and calendar — designed to keep you productive without getting in your way.
