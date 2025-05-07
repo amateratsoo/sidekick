@@ -154,7 +154,7 @@ export function CreateHabitModal(): JSX.Element {
         <HabitColor currentColor={currentColor} setCurrentColor={setCurrentColor} />
 
         <button
-          className="[border-b-4 border-2 border-emerald-900] w-full gap-1.5 flex items-center justify-center rounded-xl bg-green-500 py-2 text-lg font-bold mt-7 cursor-pointer transition-transform active:scale-[93%]"
+          className="border-b-4 border-2 border-emerald-900 w-full gap-1.5 flex items-center justify-center rounded-xl bg-green-500 py-2 text-lg font-bold mt-7 cursor-pointer transition-transform active:scale-[96%]"
           type="submit"
         >
           Criar hábito

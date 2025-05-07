@@ -181,16 +181,27 @@ export function HabitDetailsModal({
 
   function toggleHabit() {
     if (!habitIsCompleted) {
-      completedHabitDates.current = [...completedHabitDates.current, dayjs().format('DD/MM/YYYY')]
+      completedHabitDates.current.push(dayjs().format('DD/MM/YYYY'))
       streak.current += 1
       setHabitIsCompleted(true)
-
-      return
+    } else {
+      completedHabitDates.current.pop()
+      streak.current -= 1
+      setHabitIsCompleted(false)
     }
 
-    completedHabitDates.current.pop()
-    streak.current -= 1
-    setHabitIsCompleted(false)
+    setHabits((prev) =>
+      prev.map((habit) => {
+        if (habit.id == id) {
+          return {
+            ...habit,
+            streak: streak.current
+          }
+        }
+
+        return habit
+      })
+    )
   }
 
   async function createTask() {
