@@ -1,0 +1,49 @@
+@keyframes feather-write {
+  0%,
+  100% {
+    transform: rotate(0deg) translate(0, 0);
+  }
+  25% {
+    transform: rotate(-10deg) translate(-1px, 1px);
+  }
+  50% {
+    transform: rotate(6deg) translate(1px, -1px);
+  }
+  75% {
+    transform: rotate(-5deg) translate(-1px, 0px);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}

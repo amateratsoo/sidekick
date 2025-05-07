@@ -1,4 +1,4 @@
-import type { SetStateAction } from 'react'
+import type { SetStateAction, ReactNode } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import type { ClassValue } from 'clsx'
 
@@ -6,8 +6,9 @@ import { ScrollArea } from './scroll-area'
 import { cn } from '@renderer/utils'
 
 export interface Props {
-  children: React.ReactNode
-  trigger?: React.ReactNode
+  children: ReactNode
+  trigger?: ReactNode
+  icon?: ReactNode
   title?: string
   description?: string
   open: boolean
@@ -23,6 +24,7 @@ export interface Props {
 export function Modal({
   trigger = null,
   title,
+  icon,
   description,
   children,
   open,
@@ -40,17 +42,26 @@ export function Modal({
       <Dialog.Portal>
         {overlay && (
           <Dialog.Overlay
-            className={cn('fixed inset-0 bg-black/60 backdrop-blur-sm', overlayClassName)}
+            className={cn(
+              'data-[state=open]:opacity-100 data-[state=close]:opacity-0 transition-all fixed inset-0 bg-black/60 backdrop-blur-sm',
+              overlayClassName
+            )}
           />
         )}
         <Dialog.Content
           className={cn(
-            'fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-xl -p-[25px] border border-zinc-900 bg-zinc-950 focus:outline-none data-[state=open]:animate-contentShow',
+            'data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out will-change-transform fixed left-1/2 top-1/2 max-h-[85vh] w-[90vw] max-w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-xl -p-[25px] border border-zinc-900 bg-zinc-950 focus:outline-none data-[state=open]:animate-contentShow',
             className
           )}
         >
           <ScrollArea className={cn('h-full w-full p-[25px] overflow-auto', scrollAreaClassName)}>
-            <Dialog.Title className={cn('text-zinc-300 font-semibold text-2xl', titleClassName)}>
+            <Dialog.Title
+              className={cn(
+                'flex items-center text-zinc-300 font-semibold text-2xl',
+                titleClassName
+              )}
+            >
+              <div>{icon}</div>
               {title}
             </Dialog.Title>
             <Dialog.Description className={cn('text-zinc-300', descriptionClassName)}>

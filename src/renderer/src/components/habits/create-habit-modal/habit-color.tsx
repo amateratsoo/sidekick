@@ -24,7 +24,7 @@ export function HabitColor({ currentColor, setCurrentColor }: Props): JSX.Elemen
   return (
     <div className="mt-5">
       <label htmlFor="" className="text-lg text-zinc-500/40">
-        Cor
+        Aparência
       </label>
       <div className="mt-3 flex flex-wrap gap-1.5 items-center">
         {colors.map((color) => {
@@ -40,7 +40,7 @@ export function HabitColor({ currentColor, setCurrentColor }: Props): JSX.Elemen
               }}
               key={color}
               className={cn(
-                'rounded-full border border-zinc-900 w-9 h-6 text-transparent cursor-pointer',
+                'rounded-full border-2 border-zinc-950 w-9 h-6 text-transparent cursor-pointer',
                 {
                   'ring-zinc-500/50 ring-2': currentColor == color
                 }

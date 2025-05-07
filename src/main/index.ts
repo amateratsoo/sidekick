@@ -1,7 +1,7 @@
 import { app, shell, ipcMain, BrowserWindow } from 'electron'
 import { join } from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon5.png?asset'
+import icon from '../../resources/icon.png?asset'
 
 import { db } from './database/controllers'
 import { InsertableHabit, InsertableTask, UpdateableHabit, UpdateableTask } from '@shared/types'

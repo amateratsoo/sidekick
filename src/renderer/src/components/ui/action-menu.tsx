@@ -8,6 +8,7 @@ export interface Action {
   icon?: ElementType
   action: () => void
   className?: string
+  containerClassName?: string
 }
 
 interface Props extends PopoverContentProps {
@@ -67,7 +68,12 @@ export function ActionMenu({
                 className="flex gap-2.5 cursor-pointer w-full h-full p-1 px-1.5"
               >
                 {Icon ? (
-                  <div className="rounded-md grid place-items-center h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800">
+                  <div
+                    className={cn(
+                      'rounded-md grid place-items-center h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800',
+                      action.containerClassName
+                    )}
+                  >
                     <Icon className="size-3.5" />
                   </div>
                 ) : (

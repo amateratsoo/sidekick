@@ -175,6 +175,7 @@ export function HabitDetailsModal({
   async function deleteHabit() {
     await db.habit.destroy(id)
     setHabits((prev) => prev.filter((habit) => habit.id != id))
+    setOpenAlertDialog(false)
     onOpenChange(false)
   }
 
@@ -247,7 +248,7 @@ export function HabitDetailsModal({
           <span className="block text-zinc-500/20 text-lg font-bold font-serif">Eu vou</span>
           <div className="flex">
             <div className="group flex">
-              <p className="text-zinc-300 font-bold font-sans text-xl w-fit max-w-80 truncate --line-clamp-1">
+              <p className="text-zinc-300 font-bold font-sans text-xl w-fit max-w-[19rem] truncate">
                 {nameValue}
               </p>
               <ActionMenu

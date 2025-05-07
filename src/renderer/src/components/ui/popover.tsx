@@ -25,7 +25,13 @@ export function Popover({
       <RadixPopover.Trigger asChild>{trigger}</RadixPopover.Trigger>
       <RadixPopover.Anchor />
       <RadixPopover.Portal>
-        <RadixPopover.Content className={cn('bg-zinc-950', className)} {...props}>
+        <RadixPopover.Content
+          className={cn(
+            'data-[state=open]:animate-fade-in [animation-duration:115ms] data-[state=closed]:animate-fade-out will-change-transform bg-zinc-950',
+            className
+          )}
+          {...props}
+        >
           {children}
         </RadixPopover.Content>
       </RadixPopover.Portal>
