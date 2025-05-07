@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactElement, useRef, useState } from 'react'
 import { ActionMenu, Popover } from '@renderer/components/ui'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import dayjs from 'dayjs'
@@ -24,9 +24,8 @@ export function HabitTrackingTime() {
       </label>
       <div className="mt-3">
         <ActionMenu
-          alignOffset={-42}
-          side="left"
-          align="start"
+          side="right"
+          align="end"
           triggerClassName="bg-transparent border-none m-0 p-0 outline-none ring-zinc-400 -focus-within:ring-2"
           trigger={
             <div
@@ -90,8 +89,8 @@ export function HabitTrackingTime() {
             stroke="currentColor"
             className="size-5"
           >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
               {' '}
               <title></title>{' '}

@@ -7,6 +7,7 @@ import React, {
   useState
 } from 'react'
 import { Popover } from './popover'
+import { PopoverContentProps } from '@radix-ui/react-popover'
 
 type ClassValue =
   | ClassArray
@@ -246,15 +247,19 @@ function sanitizeHex(val: string) {
   const sanitized = val.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
   return sanitized
 }
+
+interface Props extends PopoverContentProps {
+  default_value?: string
+  children: ReactNode
+  handleColorChange?: (state: SetStateAction<string>) => void
+}
+
 const ColorPicker = ({
   default_value = '#22c55e',
   children,
-  handleColorChange = () => {}
-}: {
-  default_value?: string
-  children: ReactNode
-  handleColorChange?: (state: SetStateAction<string | undefined>) => void
-}) => {
+  handleColorChange = () => {},
+  ...props
+}: Props) => {
   // Initialize from controlled prop or a default
   const [color, setColor] = useState<Color>(() => {
     const hex = sanitizeHex(default_value)
@@ -284,9 +289,10 @@ const ColorPicker = ({
       align="center"
       side="bottom"
       sideOffset={22}
-      className="bg-zinc-950"
+      className="bg-zinc-950 rounded-xl"
+      {...props}
     >
-      <div className="bg-zinc-950">
+      <div className="bg-zinc-950 rounded-xl">
         <style
           id="slider-thumb-style"
           dangerouslySetInnerHTML={{

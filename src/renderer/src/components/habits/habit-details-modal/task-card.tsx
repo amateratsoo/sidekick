@@ -134,6 +134,7 @@ export function TaskCard({
             </span>
 
             <ActionMenu
+              anchored
               actions={actions}
               trigger={<PenLineIcon className="size-3.5" />}
               triggerClassName="hidden group-hover:grid place-items-center"

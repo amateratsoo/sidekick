@@ -6,7 +6,7 @@ import { cn } from '@renderer/utils'
 
 interface Props {
   currentBadge?: string
-  setCurrentBadge: (state: SetStateAction<string | undefined>) => void
+  setCurrentBadge: (state: SetStateAction<string>) => void
 }
 
 export function HabitBadge({ currentBadge, setCurrentBadge }: Props): JSX.Element {

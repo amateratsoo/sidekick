@@ -6,7 +6,7 @@ import { ColorPicker } from '@renderer/components/ui'
 
 interface Props {
   currentColor?: string
-  setCurrentColor: (state: SetStateAction<string | undefined>) => void
+  setCurrentColor: (state: SetStateAction<string>) => void
 }
 
 const colors = [
@@ -51,6 +51,7 @@ export function HabitColor({ currentColor, setCurrentColor }: Props): JSX.Elemen
         })}
 
         <ColorPicker
+          sideOffset={12}
           handleColorChange={setCurrentColor}
           default_value={currentColor ? currentColor : undefined}
         >

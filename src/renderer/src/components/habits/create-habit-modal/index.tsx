@@ -10,16 +10,14 @@ import { Modal, Input, Button } from '@renderer/components/ui'
 import { HabitFrequency } from './habit-frequency'
 import { HabitBadge } from './habit-badge'
 import { HabitColor } from './habit-color'
-import { Feather, Wand, Wand2, WandSparkles, WandSparklesIcon } from 'lucide-react'
 import { HabitTrackingTime } from './habit-tracking-time'
-import { MagicWandIcon } from '@radix-ui/react-icons'
 
 const { db } = window.api
 
 export function CreateHabitModal(): JSX.Element {
   const [habitsWeekdays, setHabitsWeekdays] = useState<string[]>([])
-  const [currentBadge, setCurrentBadge] = useState<string | undefined>(undefined)
-  const [currentColor, setCurrentColor] = useState<string | undefined>(undefined)
+  const [currentBadge, setCurrentBadge] = useState<string>('')
+  const [currentColor, setCurrentColor] = useState<string>('')
   const [showAllColors, setShowAllColors] = useState(false)
 
   const [openModal, setOpenModal] = useState(false)
@@ -154,7 +152,7 @@ export function CreateHabitModal(): JSX.Element {
         <HabitColor currentColor={currentColor} setCurrentColor={setCurrentColor} />
 
         <button
-          className="border-b-4 border-2 border-emerald-900 w-full gap-1.5 flex items-center justify-center rounded-xl bg-green-500 py-2 text-lg font-bold mt-7 cursor-pointer transition-transform active:scale-[96%]"
+          className="border-b-4 border-2 border-emerald-700 w-full gap-1.5 flex items-center justify-center rounded-xl bg-green-500 py-2 text-lg font-bold mt-7 cursor-pointer transition-transform active:scale-[96%]"
           type="submit"
         >
           Criar hábito

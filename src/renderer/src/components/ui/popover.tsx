@@ -5,11 +5,13 @@ import type { PopoverContentProps } from '@radix-ui/react-popover'
 
 import { cn } from '@renderer/utils'
 
-interface Props extends PopoverContentProps {
+export interface Props extends PopoverContentProps {
   children: ReactNode
   trigger?: ReactNode
   onOpenChange?: (state: SetStateAction<boolean>) => void
   open?: boolean
+  portalContainer?: Element | DocumentFragment | null | undefined
+  anchored?: boolean
 }
 
 export function Popover({
@@ -18,13 +20,15 @@ export function Popover({
   className,
   open = undefined,
   onOpenChange = undefined,
+  portalContainer,
+  anchored = false,
   ...props
 }: Props) {
   return (
     <RadixPopover.Root onOpenChange={onOpenChange} open={open}>
       <RadixPopover.Trigger asChild>{trigger}</RadixPopover.Trigger>
-      <RadixPopover.Anchor />
-      <RadixPopover.Portal>
+      {anchored && <RadixPopover.Anchor />}
+      <RadixPopover.Portal container={portalContainer}>
         <RadixPopover.Content
           className={cn(
             'data-[state=open]:animate-fade-in [animation-duration:115ms] data-[state=closed]:animate-fade-out will-change-transform bg-zinc-950',

@@ -1,6 +1,6 @@
 import type { ElementType, ReactNode, SetStateAction } from 'react'
 import type { PopoverContentProps } from '@radix-ui/react-popover'
-import { Popover } from './popover'
+import { Popover, Props as PopoverProps } from './popover'
 import { cn } from '@renderer/utils'
 
 export interface Action {
@@ -11,12 +11,9 @@ export interface Action {
   containerClassName?: string
 }
 
-interface Props extends PopoverContentProps {
+interface Props extends Omit<PopoverProps, 'children'> {
   actions: Action[]
-  trigger?: ReactNode
   triggerClassName?: string
-  open?: boolean
-  onOpenChange?: (state: SetStateAction<boolean>) => void
 }
 
 export function ActionMenu({
@@ -24,14 +21,10 @@ export function ActionMenu({
   trigger: Trigger,
   className,
   triggerClassName,
-  open,
-  onOpenChange,
   ...props
 }: Props) {
   return (
     <Popover
-      open={open}
-      onOpenChange={onOpenChange}
       align="center"
       side="top"
       sideOffset={10}

@@ -19,7 +19,14 @@ export function EditTaskPopover({
   setName
 }: Props) {
   return (
-    <Popover align="end" side="top" sideOffset={32} onOpenChange={setIsEditMode} open={isEditMode}>
+    <Popover
+      align="end"
+      side="top"
+      sideOffset={32}
+      onOpenChange={setIsEditMode}
+      open={isEditMode}
+      anchored
+    >
       <div className="rounded-lg bg-zinc-950 border border-zinc-900 shadow-zinc-900/40 shadow-2xl w-72 h-fit">
         <div className="bg-zinc-900/50 rounded-lg">
           <Input

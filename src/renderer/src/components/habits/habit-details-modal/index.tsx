@@ -15,6 +15,7 @@ import type { SelectableHabit, SelectableTask } from '@shared/types'
 import type { Action } from '@renderer/components/ui/action-menu'
 import { EditHabitPopover } from './edit-habit-popover'
 import { AlertDialog } from '@renderer/components/ui/alert-dialog'
+import { EditHabitColorPopover } from './edit-habit-color-popover'
 
 interface Props extends SelectableHabit {
   open: boolean
@@ -48,6 +49,7 @@ export function HabitDetailsModal({
   const [openAlertDialog, setOpenAlertDialog] = useState(false)
 
   const [isEditMode, setIsEditMode] = useState(false)
+  const [isColorEditMode, setIsColorEditMode] = useState(false)
   const [name, setName] = useState(nameFromProps || '')
   const [description, setDescription] = useState(descriptionFromProps)
   const [badge, setBadge] = useState(badgeFromProps)
@@ -232,7 +234,7 @@ export function HabitDetailsModal({
         setIsEditMode(true)
       }
     },
-    { name: 'Aparência', icon: BlendingModeIcon, action: () => {} },
+    { name: 'Aparência', icon: BlendingModeIcon, action: () => setIsColorEditMode(true) },
     {
       name: 'Apagar',
       icon: EraserIcon,
@@ -267,6 +269,7 @@ export function HabitDetailsModal({
                 trigger={<PenLineIcon className="size-3.5" />}
                 side="bottom"
                 triggerClassName="hidden group-hover:grid place-items-center"
+                anchored
               />
 
               <EditHabitPopover
@@ -278,6 +281,15 @@ export function HabitDetailsModal({
                 setIsEditMode={setIsEditMode}
                 name={name}
                 setName={setName}
+              />
+
+              <EditHabitColorPopover
+                color={color}
+                setColor={setColor}
+                name={name}
+                badge={badge}
+                isColorEditMode={isColorEditMode}
+                setIsColorEditMode={setIsColorEditMode}
               />
             </div>
 
