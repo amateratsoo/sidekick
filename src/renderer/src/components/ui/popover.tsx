@@ -18,8 +18,8 @@ export function Popover({
   children,
   trigger = null,
   className,
-  open = undefined,
-  onOpenChange = undefined,
+  open,
+  onOpenChange,
   portalContainer,
   anchored = false,
   ...props
@@ -31,7 +31,7 @@ export function Popover({
       <RadixPopover.Portal container={portalContainer}>
         <RadixPopover.Content
           className={cn(
-            'data-[state=open]:animate-fade-in [animation-duration:115ms] data-[state=closed]:animate-fade-out will-change-transform bg-zinc-950',
+            'select-none data-[state=open]:animate-fade-in [animation-duration:115ms] data-[state=closed]:animate-fade-out will-change-transform bg-zinc-950',
             className
           )}
           {...props}

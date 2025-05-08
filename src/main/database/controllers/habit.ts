@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 
 import { db } from '../db'
 import type { InsertableHabit, SelectableHabit, SelectableTask, UpdateableHabit } from '../schema'
+import type { HabitAtomProps } from '../../../shared/types'
 import { generateUUID } from '../../../shared/constants'
 
 export async function create({
@@ -43,6 +44,39 @@ export async function findAll(): Promise<SelectableHabit[]> {
       return {
         ...habit,
         frequency: JSON.parse(String(habit.frequency))
+      }
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function findAllWithCompletedOn(): Promise<HabitAtomProps[]> {
+  try {
+    const habits = await db
+      .selectFrom('habit')
+      .selectAll()
+      .select((eb) => [
+        // completed_on
+        jsonArrayFrom(
+          eb
+            .selectFrom('completed_habit')
+            .select(['completed_habit.completed_on'])
+            .whereRef('completed_habit.habit_id', '=', 'habit.id')
+        ).as('completed_on')
+      ])
+      .execute()
+
+    /* 
+    kysely relations recipe returns children as text
+    and not json, so we need to parse and return
+    each one of the children 
+  */
+    return habits.map((habit) => {
+      return {
+        ...habit,
+        frequency: JSON.parse(String(habit.frequency)),
+        completedOn: JSON.parse(String(habit.completed_on)).map(({ completed_on }) => completed_on)
       }
     })
   } catch (error) {

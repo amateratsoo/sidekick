@@ -6,8 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { Popover } from './popover'
-import { PopoverContentProps } from '@radix-ui/react-popover'
+import { Popover, Props as PopoverProps } from './popover'
 
 type ClassValue =
   | ClassArray
@@ -248,7 +247,7 @@ function sanitizeHex(val: string) {
   return sanitized
 }
 
-interface Props extends PopoverContentProps {
+interface Props extends PopoverProps {
   default_value?: string
   children: ReactNode
   handleColorChange?: (state: SetStateAction<string>) => void

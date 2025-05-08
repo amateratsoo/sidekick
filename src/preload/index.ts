@@ -16,6 +16,7 @@ export const api: Api = {
       isComplited: (args) => ipcRenderer.invoke('db:habit:is-completed', args),
       check: (args) => ipcRenderer.invoke('db:habit:check', args),
       uncheck: (args) => ipcRenderer.invoke('db:habit:uncheck', args),
+      findAllWithCompletedOn: () => ipcRenderer.invoke('db:habit:find-all-with-completed-on'),
       streak: {
         increase: (args) => ipcRenderer.invoke('db:habit:streak:increase', args),
         decrease: (args) => ipcRenderer.invoke('db:habit:streak:decrease', args),

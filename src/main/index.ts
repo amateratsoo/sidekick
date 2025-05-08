@@ -1,26 +1,38 @@
 import { app, shell, ipcMain, BrowserWindow } from 'electron'
 import { join } from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+
+import windowStateKeeper from 'electron-window-state'
+
 import icon from '../../resources/icon.png?asset'
 
 import { db } from './database/controllers'
 import { InsertableHabit, InsertableTask, UpdateableHabit, UpdateableTask } from '@shared/types'
 
 // feature flags
-const blurred_window = false
+const blurred_window = true
 
 let mainWindow: BrowserWindow | null = null
 
 function createWindow(): void {
+  // Load the previous state with fallback to defaults
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 900,
+    defaultHeight: 670
+  })
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
     show: false,
     fullscreenable: true,
     frame: false,
     center: true,
     backgroundColor: `rgba(9, 9, 11, ${blurred_window ? 0.6 : 1})`,
+    // backgroundColor: '#09090b',
     title: 'Sidekick',
     // for mac blur effect
     ...(blurred_window ? { vibrancy: 'under-window' } : {}),
@@ -41,7 +53,12 @@ function createWindow(): void {
     }
   })
 
-  mainWindow.on('ready-to-show', () => {
+  // Let us register listeners on the window, so we can update the state
+  // automatically (the listeners will be removed when the window is closed)
+  // and restore the maximized or full screen state
+  mainWindowState.manage(mainWindow)
+
+  mainWindow.on('ready-to-show', async () => {
     mainWindow?.show()
   })
 
@@ -111,6 +128,10 @@ app.whenReady().then(() => {
   ipcMain.handle(
     'db:habit:find-all-completed',
     async (_, habitId: string) => await db.habit.findAllCompleted(habitId)
+  )
+  ipcMain.handle(
+    'db:habit:find-all-with-completed-on',
+    async () => await db.habit.findAllWithCompletedOn()
   )
   ipcMain.handle(
     'db:habit:is-completed',

@@ -1,4 +1,4 @@
-import { ReactElement, useRef, useState } from 'react'
+import { useState } from 'react'
 import { ActionMenu, Popover } from '@renderer/components/ui'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import dayjs from 'dayjs'

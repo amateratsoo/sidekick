@@ -23,6 +23,15 @@ html {
   overflow: hidden;
 }
 
+body {
+  @apply bg-zinc-950;
+}
+
+/* disable select for certain components */
+.no-select {
+  user-select: none;
+}
+
 /* .custom-scrollbar::-webkit-scrollbar-button {
   display: none;
 }

@@ -2,4 +2,8 @@ import { atom } from 'jotai'
 
 import type { SelectableHabit } from '@shared/types'
 
-export const habitsAtom = atom<SelectableHabit[]>([])
+export interface HabitAtomProps extends SelectableHabit {
+  completedOn: string[]
+}
+
+export const habitsAtom = atom<HabitAtomProps[]>([])

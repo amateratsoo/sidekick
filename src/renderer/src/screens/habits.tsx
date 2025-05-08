@@ -1,28 +1,26 @@
 import { useEffect, useState, useRef } from 'react'
 import { useAtom } from 'jotai'
 
-import { habitsAtom } from '@renderer/store'
+import { habitsAtom, type HabitAtomProps } from '@renderer/store'
 import { cn } from '@renderer/utils'
 import { CreateHabitModal, HabitCard, HabitDetailsModal } from '../components/habits'
-
-import type { SelectableHabit } from '@shared/types'
 
 const { db } = window.api
 
 export function Habits(): JSX.Element {
-  const [habits, setHabits] = useAtom<SelectableHabit[]>(habitsAtom)
+  const [habits, setHabits] = useAtom<HabitAtomProps[]>(habitsAtom)
   const [openModal, setOpenModal] = useState(false)
-  const habitDetails = useRef<SelectableHabit>(undefined)
+  const habitDetails = useRef<HabitAtomProps>(undefined)
 
   useEffect(() => {
     ;(async (): Promise<void> => {
-      const habits = await db.habit.findAll()
+      const habits = await db.habit.findAllWithCompletedOn()
       setHabits(habits)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function openHabitDetailsModal(props: SelectableHabit): void {
+  function openHabitDetailsModal(props: HabitAtomProps): void {
     habitDetails.current = props
 
     setOpenModal(true)
@@ -31,7 +29,9 @@ export function Habits(): JSX.Element {
   return (
     <main className="w-full h-full">
       <div className={cn('w-full flex items-center justify-between py-4 px-6')}>
-        <h1 className={cn('text-4xl font-bold font-serif italic text-zinc-300')}>Seus hábitos</h1>
+        <h1 className={cn('text-4xl font-bold font-serif italic text-zinc-300 select-none')}>
+          Seus hábitos
+        </h1>
 
         <CreateHabitModal />
       </div>

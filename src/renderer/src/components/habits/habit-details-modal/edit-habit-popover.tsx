@@ -9,7 +9,7 @@ interface Props {
   name: string
   setName: (state: SetStateAction<string>) => void
   description: string
-  setDescription: (state: SetStateAction<string | undefined>) => void
+  setDescription: (state: SetStateAction<string>) => void
 }
 
 export function EditHabitPopover({

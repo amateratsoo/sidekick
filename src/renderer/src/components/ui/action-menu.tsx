@@ -1,5 +1,4 @@
-import type { ElementType, ReactNode, SetStateAction } from 'react'
-import type { PopoverContentProps } from '@radix-ui/react-popover'
+import type { ElementType } from 'react'
 import { Popover, Props as PopoverProps } from './popover'
 import { cn } from '@renderer/utils'
 

@@ -1,1 +1,1 @@
-export { habitsAtom } from './habit'
+export { habitsAtom, type HabitAtomProps } from './habit'
