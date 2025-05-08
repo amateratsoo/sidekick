@@ -14,18 +14,19 @@ import { HabitTrackingTime } from './habit-tracking-time'
 
 const { db } = window.api
 
+const DEFAULT_BADGE = '💪'
+const DEFAULT_COLOR = colors.green[500]
+
 export function CreateHabitModal(): JSX.Element {
   const [habitsWeekdays, setHabitsWeekdays] = useState<string[]>([])
   const [currentBadge, setCurrentBadge] = useState<string>('')
   const [currentColor, setCurrentColor] = useState<string>('')
-  const [showAllColors, setShowAllColors] = useState(false)
-
+  const [_, setShowAllColors] = useState(false)
   const [openModal, setOpenModal] = useState(false)
-
   const [showNameError, setShowNameError] = useState(false)
   const [showWeekdayError, setShowWeekdayError] = useState(false)
 
-  const habits = useSetAtom(habitsAtom)
+  const setHabits = useSetAtom(habitsAtom)
 
   useEffect(() => {
     if (!openModal) {
@@ -40,35 +41,37 @@ export function CreateHabitModal(): JSX.Element {
 
   async function createHabit(event: React.FormEvent): Promise<void> {
     event.preventDefault()
-    const [habitName, habitDescription] = event.currentTarget.querySelectorAll('input')
-    const [name, description] = [habitName.value.trim(), habitDescription.value.trim()]
 
-    if (!name || habitsWeekdays.length == 0) {
-      if (!name) {
-        setShowNameError(true)
-      }
+    const form = event.currentTarget as HTMLFormElement
+    const formData = new FormData(form)
+    const name = formData.get('habit-name')?.toString().trim() || ''
+    const description = formData.get('description')?.toString().trim() || ''
 
-      if (habitsWeekdays.length == 0) {
-        setShowWeekdayError(true)
-      }
+    const isNameValid = !!name
+    const isWeekdaysValid = habitsWeekdays.length > 0
 
-      return
-    }
+    setShowNameError(!isNameValid)
+    setShowWeekdayError(!isWeekdaysValid)
+
+    if (!isNameValid || !isWeekdaysValid) return
 
     const data = {
       id: crypto.randomUUID(),
+      name,
+      description,
       streak: 0,
-      name: name,
-      description: description,
       frequency: JSON.stringify(habitsWeekdays),
-      badge: currentBadge || '💪',
-      color: currentColor || colors.green[500]
+      badge: currentBadge || DEFAULT_BADGE,
+      color: currentColor || DEFAULT_COLOR
     }
 
-    const habit = (await db.habit.create(data)) as SelectableHabit
-
-    habits((prev) => [...prev, habit])
-    setOpenModal(false)
+    try {
+      const habit = (await db.habit.create(data)) as SelectableHabit
+      setHabits((prev) => [...prev, { ...habit, completedOn: [] }])
+      setOpenModal(false)
+    } catch (error) {
+      console.error("Couldn't create the habit:", error)
+    }
   }
 
   return (

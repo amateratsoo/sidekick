@@ -34,10 +34,6 @@ export function EditHabitColorPopover({
       <div className="bg-zinc-950 w-fit h-fit flex">
         <div className="p-4 flex items-center justify-center">
           <ColorPicker
-            // side="bottom"
-            // align="end"
-            // sideOffset={74}
-            // alignOffset={-142}
             side="left"
             align="start"
             sideOffset={32}

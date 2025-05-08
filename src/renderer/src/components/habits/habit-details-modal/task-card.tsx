@@ -1,10 +1,8 @@
 import { type SetStateAction, useEffect, useState } from 'react'
-
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import 'highlight.js/styles/github-dark.css'
-
 import { CursorTextIcon, CheckIcon, EraserIcon } from '@radix-ui/react-icons'
 import { PenLineIcon } from 'lucide-react'
 
@@ -33,13 +31,12 @@ export function TaskCard({
   setTasks
 }: Props) {
   const [openAlertDialog, setOpenAlertDialog] = useState(false)
-
   const [isEditMode, setIsEditMode] = useState(false)
   const [name, setName] = useState(nameFromProps)
   const [description, setDescription] = useState(descriptionFromProps)
   const [isCompleted, setIsCompleted] = useState(is_completed)
 
-  const nameValue = name!.length > 0 ? name : nameFromProps
+  const nameValue = name && (name.length > 0 ? name : nameFromProps)
 
   const actions: Action[] = [
     {
@@ -66,9 +63,11 @@ export function TaskCard({
 
   function checkTask() {
     setIsCompleted((prev) => {
-      // find the task with the same id and change
-      // the is_completed status
-      // then reflect the changes on the ui
+      /* 
+        find the task with the same id and change
+        the is_completed status
+        then reflect the changes on the ui 
+      */
       setTasks((t) => {
         return t.map((task) => {
           if (task.id == id) {
@@ -87,9 +86,11 @@ export function TaskCard({
   }
 
   useEffect(() => {
-    // note: when i click off the modal,
-    // in the overlay for example
-    // the state is not saved
+    /* 
+      note: when click out the modal,
+      in the overlay for example
+      the state is not saved
+    */
     if (!isEditMode) {
       setTasks((prev) => {
         return prev.map((task) => {
@@ -100,7 +101,8 @@ export function TaskCard({
               habit_id,
               id,
               is_completed,
-              name: nameValue // when the user left the field we will populate with the last written name
+              // when the user left the field we will populate with the last written name
+              name: nameValue
             }
           }
 
@@ -112,7 +114,6 @@ export function TaskCard({
 
   return (
     <div
-      key={id}
       className={cn('flex items-center justify-between', {
         'opacity-25': isCompleted
       })}
@@ -161,6 +162,8 @@ export function TaskCard({
       <button
         className="rounded-lg bg-zinc-900/60 size-7 flex items-center justify-center cursor-pointer self-start mt-3.5"
         role="checkbox"
+        aria-checked={isCompleted}
+        aria-label={`Marcar tarefa ${nameValue} como ${isCompleted ? 'incompleta' : 'completa'}`}
         onClick={checkTask}
       >
         {isCompleted && <CheckIcon className="size-5" />}

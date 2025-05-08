@@ -53,7 +53,7 @@ export function HabitColor({ currentColor, setCurrentColor }: Props): JSX.Elemen
         <ColorPicker
           sideOffset={12}
           handleColorChange={setCurrentColor}
-          default_value={currentColor ? currentColor : undefined}
+          default_value={currentColor}
         >
           <button
             type="button"

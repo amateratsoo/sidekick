@@ -1,4 +1,4 @@
-import { type CSSProperties, type SetStateAction, useEffect, useMemo, useState } from 'react'
+import { type CSSProperties, type SetStateAction, useEffect, useState } from 'react'
 import { BlendingModeIcon, CounterClockwiseClockIcon, CursorTextIcon } from '@radix-ui/react-icons'
 import { EraserIcon, Flame, PenLineIcon } from 'lucide-react'
 import dayjs from 'dayjs'
@@ -35,7 +35,6 @@ export function HabitDetailsModal({
   onOpenChange,
   completedOn: completedOnFromProps = []
 }: Props): JSX.Element | null {
-  // State management
   const [completionGraphMode, setCompletionGraphMode] = useState<'yearly' | 'monthly'>('monthly')
   const setHabits = useSetAtom(habitsAtom)
   const [tasks, setTasks] = useState<SelectableTask[]>([])
@@ -82,7 +81,7 @@ export function HabitDetailsModal({
 
   // Save changes when modal is closed
   useEffect(() => {
-    if (open) return // Only execute when closing
+    if (open) return
 
     const saveChanges = async () => {
       // Save habit changes if needed
@@ -253,42 +252,36 @@ export function HabitDetailsModal({
   }
 
   // Menu & items definitions
-  const actions: Action[] = useMemo(
-    () => [
-      {
-        name: 'Editar',
-        icon: CursorTextIcon,
-        action: () => {
-          setName(nameValue)
-          setIsEditMode(true)
-        }
-      },
-      {
-        name: 'Aparência',
-        icon: BlendingModeIcon,
-        action: () => setIsColorEditMode(true)
-      },
-      {
-        name: 'Apagar',
-        icon: EraserIcon,
-        action: () => setOpenAlertDialog(true),
-        className: 'text-red-400'
+  const actions: Action[] = [
+    {
+      name: 'Editar',
+      icon: CursorTextIcon,
+      action: () => {
+        setName(nameValue)
+        setIsEditMode(true)
       }
-    ],
-    [nameValue]
-  )
+    },
+    {
+      name: 'Aparência',
+      icon: BlendingModeIcon,
+      action: () => setIsColorEditMode(true)
+    },
+    {
+      name: 'Apagar',
+      icon: EraserIcon,
+      action: () => setOpenAlertDialog(true),
+      className: 'text-red-400'
+    }
+  ]
 
-  const progressSectionItems = useMemo(
-    () => [
-      { name: 'ofensiva', value: streak, icon: Flame },
-      {
-        name: 'começou em',
-        value: dayjs(created_at).format('DD/MM/YYYY'),
-        icon: CounterClockwiseClockIcon
-      }
-    ],
-    [streak, created_at]
-  )
+  const progressSectionItems = [
+    { name: 'ofensiva', value: streak, icon: Flame },
+    {
+      name: 'começou em',
+      value: dayjs(created_at).format('DD/MM/YYYY'),
+      icon: CounterClockwiseClockIcon
+    }
+  ]
 
   if (loading) return null
 
