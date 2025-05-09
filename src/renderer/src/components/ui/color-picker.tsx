@@ -375,7 +375,7 @@ const ColorPicker = ({
             min="0"
             max="360"
             value={color.h}
-            className="dark:border-zinc-7000 h-3 w-full cursor-pointer appearance-none rounded-full border border-zinc-200 bg-white text-white placeholder:text-white dark:border-zinc-700"
+            className="dark:border-zinc-7000 h-3 w-full appearance-none rounded-full border border-zinc-200 bg-white text-white placeholder:text-white dark:border-zinc-700"
             style={{
               background: `linear-gradient(to right, 
                     hsl(0, 100%, 50%), 
@@ -449,7 +449,7 @@ const ColorPicker = ({
                   key={index}
                   role="button"
                   data-color={`hsl(${color.h}, ${color.s}%, ${l}%)`}
-                  className="size-7 rounded-md cursor-pointer"
+                  className="size-7 rounded-md"
                   style={{
                     backgroundColor: `hsl(${color.h}, ${color.s}%, ${l}%)`
                   }}
@@ -480,7 +480,7 @@ const ColorPicker = ({
                   key={index}
                   role="button"
                   data-color={`hsl(${color.h}, ${color.s}%, ${l}%)`}
-                  className="size-7 rounded-md cursor-pointer"
+                  className="size-7 rounded-md"
                   style={{
                     backgroundColor: `hsl(${color.h}, ${color.s}%, ${l}%)`
                   }}

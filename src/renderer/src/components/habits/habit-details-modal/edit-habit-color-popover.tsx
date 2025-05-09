@@ -42,7 +42,7 @@ export function EditHabitColorPopover({
             handleColorChange={setColor}
           >
             <button
-              className="rounded-3xl text-2xl size-20 mr-2 ml-3.5 aspect-square cursor-pointer"
+              className="rounded-3xl text-2xl size-20 mr-2 ml-3.5 aspect-square"
               style={{ backgroundColor: color }}
             />
           </ColorPicker>

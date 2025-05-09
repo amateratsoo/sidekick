@@ -83,7 +83,7 @@ export function WindowBorder({ children }: Props) {
           {showTitleBar && (
             <>
               <button
-                className="rounded-md p-1 cursor-pointer hover:bg-zinc-800 [-webkit-app-region:no-drag]"
+                className="rounded-md p-1 hover:bg-zinc-800 [-webkit-app-region:no-drag]"
                 onClick={toggleSidebar}
               >
                 <svg

@@ -19,23 +19,21 @@ export function HabitBadge({ currentBadge, setCurrentBadge }: Props): JSX.Elemen
       </label>
       <div className="mt-3 flex flex-wrap gap-1.5">
         {emojis.current.map((badge) => {
+          const isSelected = currentBadge === badge
+
           return (
             <button
               type="button"
               onClick={() => {
-                if (currentBadge == badge) {
+                if (isSelected) {
                   setCurrentBadge('')
                   return
                 }
                 setCurrentBadge(badge)
               }}
+              data-is-selected={isSelected}
               key={badge}
-              className={cn(
-                'rounded-full text-zinc-300 border border-zinc-900 px-2.5 py-[2.8px] cursor-pointer',
-                {
-                  'bg-zinc-800 text-zinc-950': currentBadge == badge
-                }
-              )}
+              className="data-[is-selected=true]:bg-zinc-800 data-[is-selected=true]:text-zinc-950 hover:scale-105 hover:bg-zinc-900 -hover:rotate-3 transition-transform [transition-timing-function:var(--transition-snappy)] rounded-full text-zinc-300 border border-zinc-900 px-2.5 py-[2.8px]"
             >
               {badge}
             </button>
@@ -45,9 +43,7 @@ export function HabitBadge({ currentBadge, setCurrentBadge }: Props): JSX.Elemen
         <EmojiPicker onEmojiSelect={setCurrentBadge}>
           <button
             type="button"
-            className={cn(
-              'rounded-full text-zinc-300 border border-zinc-900 px-2.5 h-8 cursor-pointer group hover:bg-green-500'
-            )}
+            className="rounded-full text-zinc-300 border border-zinc-900 px-2.5 h-8 group hover:bg-green-500"
           >
             <DotsHorizontalIcon className="stroke-green-500 group-hover:stroke-green-800 group-hover:text-green-800" />
           </button>

@@ -30,7 +30,7 @@ export function ActionMenu({
       trigger={
         <button
           className={cn(
-            'rounded-md cursor-pointer h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800 ml-2.5',
+            'rounded-md h-fit w-fit p-1 bg-zinc-900/60 border border-zinc-800 ml-2.5',
             triggerClassName
           )}
         >
@@ -55,10 +55,7 @@ export function ActionMenu({
               )}
               key={action.name}
             >
-              <button
-                onClick={action.action}
-                className="flex gap-2.5 cursor-pointer w-full h-full p-1 px-1.5"
-              >
+              <button onClick={action.action} className="flex gap-2.5 w-full h-full p-1 px-1.5">
                 {Icon ? (
                   <div
                     className={cn(

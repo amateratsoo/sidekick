@@ -60,6 +60,7 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', async () => {
     mainWindow?.show()
+    mainWindow?.focus()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

@@ -160,7 +160,7 @@ export function TaskCard({
       </div>
 
       <button
-        className="rounded-lg bg-zinc-900/60 size-7 flex items-center justify-center cursor-pointer self-start mt-3.5"
+        className="rounded-lg bg-zinc-900/60 size-7 flex items-center justify-center self-start mt-3.5"
         role="checkbox"
         aria-checked={isCompleted}
         aria-label={`Marcar tarefa ${nameValue} como ${isCompleted ? 'incompleta' : 'completa'}`}

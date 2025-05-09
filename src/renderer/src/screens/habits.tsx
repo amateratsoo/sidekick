@@ -46,9 +46,9 @@ export function Habits(): JSX.Element {
       >
         {habits.map((habit) => (
           <button
+            className="hover:scale-95 hover:rotate-3 transition-transform [transition-timing-function:var(--transition-snappy)]"
             onClick={() => openHabitDetailsModal(habit)}
             key={habit.id}
-            className="cursor-pointer"
           >
             <HabitCard {...habit} />
           </button>

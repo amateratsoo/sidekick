@@ -28,6 +28,8 @@ export function HabitColor({ currentColor, setCurrentColor }: Props): JSX.Elemen
       </label>
       <div className="mt-3 flex flex-wrap gap-1.5 items-center">
         {colors.map((color) => {
+          const isSelected = currentColor == color
+
           return (
             <button
               type="button"
@@ -39,12 +41,8 @@ export function HabitColor({ currentColor, setCurrentColor }: Props): JSX.Elemen
                 setCurrentColor(color)
               }}
               key={color}
-              className={cn(
-                'rounded-full border-2 border-zinc-950 w-9 h-6 text-transparent cursor-pointer',
-                {
-                  'ring-zinc-500/50 ring-2': currentColor == color
-                }
-              )}
+              data-is-selected={isSelected}
+              className="hover:scale-105 -hover:rotate-3 transition-transform [transition-timing-function:var(--transition-snappy)] rounded-full border-2 border-zinc-950 w-9 h-6 text-transparent data-[is-selected=true]:ring-zinc-500/50 data-[is-selected=true]:ring-2"
               style={{ backgroundColor: color }}
             ></button>
           )
@@ -57,7 +55,7 @@ export function HabitColor({ currentColor, setCurrentColor }: Props): JSX.Elemen
         >
           <button
             type="button"
-            className="rounded-full text-zinc-300 border border-zinc-900 px-2.5 py-1.5 cursor-pointer group hover:bg-green-500"
+            className="rounded-full text-zinc-300 border border-zinc-900 px-2.5 py-1.5 group hover:bg-green-500"
           >
             <DotsHorizontalIcon className="stroke-green-500 group-hover:text-green-800 group-hover:stroke-green-800" />
           </button>

@@ -21,7 +21,7 @@ export function AlertDialog({ actions = [], ...props }: Props) {
             <Button
               key={action.name}
               className={cn(
-                'rounded-lg bg-zinc-900 font-sans text-sm font-semibold text-zinc-400 px-2 py-1 cursor-pointer transition-transform active:scale-[93%]',
+                'rounded-lg bg-zinc-900 font-sans text-sm font-semibold text-zinc-400 px-2 py-1 transition-transform active:scale-[93%]',
                 action.className || ''
               )}
               onClick={action.action}

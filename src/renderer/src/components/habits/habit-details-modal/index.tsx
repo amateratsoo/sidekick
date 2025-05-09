@@ -332,7 +332,7 @@ export function HabitDetailsModal({
             <button
               data-habit-is-completed={habitIsCompleted}
               title={`${habitIsCompleted ? 'desmarcar' : 'marcar'} tarefa`}
-              className="rounded-lg ring-2 cursor-pointer size-6 ml-auto -mt-1"
+              className="rounded-lg ring-2 size-6 ml-auto -mt-1"
               style={
                 {
                   '--tw-ring-color': habitIsCompleted ? color : 'var(--color-zinc-600)'
@@ -369,7 +369,7 @@ export function HabitDetailsModal({
             <div className="text-zinc-500 border border-zinc-900 bg-zinc-900/20 rounded-lg text-xs p-[0.10rem]">
               <button
                 onClick={() => setCompletionGraphMode('monthly')}
-                className={cn('p-1 px-2 cursor-pointer rounded-md', {
+                className={cn('p-1 px-2 rounded-md', {
                   'bg-zinc-900': completionGraphMode === 'monthly'
                 })}
               >
@@ -377,7 +377,7 @@ export function HabitDetailsModal({
               </button>
               <button
                 onClick={() => setCompletionGraphMode('yearly')}
-                className={cn('p-1 px-2 cursor-pointer rounded-md', {
+                className={cn('p-1 px-2 rounded-md', {
                   'bg-zinc-900': completionGraphMode === 'yearly'
                 })}
               >
@@ -400,7 +400,7 @@ export function HabitDetailsModal({
               <TaskCard {...task} setTasks={setTasks} color={color} key={task.id} />
             ))}
             <button
-              className="rounded-lg p-2 cursor-pointer text-center w-full border-dashed border-2 border-zinc-500/30 text-zinc-500/50 transition-transform active:scale-95 text-sm mt-4"
+              className="rounded-lg p-2 text-center w-full border-dashed border-2 border-zinc-500/30 text-zinc-500/50 transition-transform active:scale-95 text-sm mt-4"
               onClick={createTask}
             >
               adicionar nova tarefa 🪄

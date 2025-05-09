@@ -30,6 +30,7 @@ export function HabitCard({
     const prev = allDays[currentMonth > 0 ? currentMonth - 1 : allDays.length - 1]
     const startDayOfWeek = dayjs(`${currentYear}-${currentMonth + 1}-1`).day()
     const leadingDays = prev.slice(prev.length - startDayOfWeek)
+
     return [leadingDays, current]
   }, [allDays, currentMonth, currentYear])
 

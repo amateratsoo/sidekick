@@ -30,11 +30,12 @@ export function EditHabitPopover({
       side="top"
       sideOffset={10}
       anchored
+      className="bg-transparent"
     >
       <div className="rounded-lg bg-zinc-950 border border-zinc-900 shadow-zinc-900/40 shadow-2xl w-80 h-fit flex">
         <div className="p-4 flex items-center justify-center">
           <EmojiPicker onEmojiSelect={setBadge} className="mt-4">
-            <button className="rounded-lg p-2 bg-zinc-900/60 text-2xl aspect-square cursor-pointer">
+            <button className="rounded-lg p-2 bg-zinc-900/60 text-2xl aspect-square">
               {badge}
             </button>
           </EmojiPicker>
