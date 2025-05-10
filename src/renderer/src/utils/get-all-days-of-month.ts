@@ -6,6 +6,11 @@ interface Props {
   year?: number
 }
 
+interface Day {
+  type: 'current' | 'paddedLeft' | 'paddedRight'
+  day: number
+}
+
 export function getAllDaysOfMonth(props?: Props) {
   // assert default values if props is undefined
   const month = props?.month || dayjs().month() + 1 // 1 -> january; 12 -> december
@@ -14,15 +19,17 @@ export function getAllDaysOfMonth(props?: Props) {
 
   const date = `${year}-${month}-${1}`
   const days = dayjs(date).daysInMonth()
-  let paddingLeft: number[] = []
-  let paddingRight: number[] = []
+
+  let leftPaddedDays: Day[] = []
+  let rightPaddedDays: Day[] = []
 
   if (padding === 'left' || padding === 'both') {
     const startOfMonthWeekDay = dayjs(date).startOf('month').day()
     const prevMonthDays = dayjs(date).subtract(1, 'month').daysInMonth()
-    paddingLeft = Array.from({ length: prevMonthDays }, (_, index) => index + 1).slice(
-      prevMonthDays - startOfMonthWeekDay
-    )
+    leftPaddedDays = Array.from(
+      { length: prevMonthDays },
+      (_, index) => ({ type: 'paddedLeft', day: index + 1 }) as Day
+    ).slice(prevMonthDays - startOfMonthWeekDay)
   }
 
   if (padding === 'right' || padding === 'both') {
@@ -31,15 +38,21 @@ export function getAllDaysOfMonth(props?: Props) {
     if (startOfNextMonthWeekDay > 0) {
       const daysInAWeek = 7
       const diff = Math.abs(startOfNextMonthWeekDay - daysInAWeek)
-      paddingRight = Array.from({ length: diff }, (_, index) => index + 1)
+      rightPaddedDays = Array.from(
+        { length: diff },
+        (_, index) => ({ type: 'paddedRight', day: index + 1 }) as Day
+      )
     }
   }
 
-  const currentMonthDays = Array.from({ length: days }, (_, index) => index + 1)
+  const currentMonthDays: Day[] = Array.from(
+    { length: days },
+    (_, index) => ({ type: 'current', day: index + 1 }) as Day
+  )
 
   return {
-    paddingLeft,
+    leftPaddedDays,
     currentMonthDays,
-    paddingRight
+    rightPaddedDays
   }
 }

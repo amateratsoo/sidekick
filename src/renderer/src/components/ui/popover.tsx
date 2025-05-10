@@ -31,7 +31,7 @@ export function Popover({
       <RadixPopover.Portal container={portalContainer}>
         <RadixPopover.Content
           className={cn(
-            'select-none data-[state=open]:animate-fade-in [animation-duration:115ms] data-[state=closed]:animate-fade-out will-change-transform bg-zinc-950',
+            'rounded-lg select-none data-[state=open]:animate-fade-in [animation-duration:115ms] data-[state=closed]:animate-fade-out will-change-transform bg-zinc-950',
             className
           )}
           {...props}

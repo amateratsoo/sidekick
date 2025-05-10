@@ -17,7 +17,7 @@ export function EmojiPicker({ onEmojiSelect, children, className, ...props }: Pr
       align="center"
       side="bottom"
       sideOffset={8}
-      className={cn('bg-zinc-950', className)}
+      className={cn('bg-zinc-950 rounded-xl', className)}
     >
       <Picker
         className="border border-zinc-900 bg-zinc-900/20 rounded-xl w-64 shadow-zinc-900/40 shadow-2xl --shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)]"

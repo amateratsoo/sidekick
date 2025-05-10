@@ -3,7 +3,7 @@ import { ActionMenu, Popover } from '@renderer/components/ui'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import dayjs from 'dayjs'
 import { CheckIcon } from '@radix-ui/react-icons'
-import { DatePicker } from '@renderer/components/ui/date-picker'
+import { DatePicker } from '@renderer/components/ui'
 import { GlowingStars } from '@renderer/components/svg'
 
 const trackingTimes = [
@@ -18,6 +18,8 @@ const trackingTimes = [
 
 export function HabitTrackingTime() {
   const [trackingTime, setTrackingTime] = useState('Para sempre')
+  const [startDate, setStartDate] = useState(dayjs().format('DD/MM/YYYY'))
+  const [endDate, setEndDate] = useState(dayjs().add(7, 'days').format('DD/MM/YYYY'))
 
   return (
     <div className="mt-5">
@@ -54,15 +56,16 @@ export function HabitTrackingTime() {
                 Data de início
               </label>
               <Popover
+                side="bottom"
+                sideOffset={8}
                 trigger={
-                  <button className="bg-zinc-900/15 py-2 px-2.5 ring-1 ring-zinc-800 text-zinc-300 outline-none focus-within:ring-zinc-300 rounded-lg flex items-center gap-1 mt-2">
-                    <span className="text-base">{dayjs().format('DD/MM/YYYY')}</span>
+                  <button className="bg-zinc-900/15 py-2 px-2.5 ring-1 ring-zinc-800 text-zinc-300 outline-none rounded-lg flex items-center gap-1 mt-2">
+                    <span className="text-base">{startDate}</span>
                     <CaretSortIcon className="size-3.5" />
                   </button>
                 }
               >
-                <div>{dayjs().format('DD/MM/YYYY')}</div>
-                <DatePicker />
+                <DatePicker initialSelectedDate={startDate} handleSelectedDate={setStartDate} />
               </Popover>
             </div>
 
@@ -71,14 +74,16 @@ export function HabitTrackingTime() {
                 Data de fim
               </label>
               <Popover
+                side="bottom"
+                sideOffset={8}
                 trigger={
-                  <button className="bg-zinc-900/15 py-2 px-2.5 ring-1 ring-zinc-800 text-zinc-300 outline-none focus-within:ring-zinc-300 rounded-lg flex items-center gap-1 mt-2">
-                    <span className="text-base">{dayjs().add(7, 'days').format('DD/MM/YYYY')}</span>
+                  <button className="bg-zinc-900/15 py-2 px-2.5 ring-1 ring-zinc-800 text-zinc-300 outline-none rounded-lg flex items-center gap-1 mt-2">
+                    <span className="text-base">{endDate}</span>
                     <CaretSortIcon className="size-3.5" />
                   </button>
                 }
               >
-                <div>{dayjs().add(7, 'days').format('DD/MM/YYYY')}</div>
+                <DatePicker initialSelectedDate={endDate} handleSelectedDate={setEndDate} />
               </Popover>
             </div>
           </div>
