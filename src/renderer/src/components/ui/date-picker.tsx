@@ -1,7 +1,7 @@
 import { useState, type SetStateAction } from 'react'
-import { getAllDaysOfMonth } from '@renderer/utils/get-all-days-of-month'
 import dayjs from 'dayjs'
 import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons'
+import { getAllDaysOfMonth } from '@renderer/utils/get-all-days-of-month'
 
 const currentMonth = dayjs().month()
 const currentYear = dayjs().year()
@@ -73,6 +73,19 @@ export function DatePicker({ handleSelectedDate, initialSelectedDate = '', min, 
     setDate(d)
   }
 
+  // helpers
+
+  function dateIsAfterMax(date: string) {
+    if (!max) return false
+
+    return dayjs(date, 'DD/MM/YYYY').isAfter(dayjs(max, 'DD/MM/YYYY'))
+  }
+
+  function dateIsBeforeMin(date: string) {
+    if (!min) return false
+
+    return dayjs(date, 'DD/MM/YYYY').isBefore(dayjs(min, 'DD/MM/YYYY'))
+  }
   return (
     <div className="text-zinc-300 border border-zinc-900 bg-zinc-900/20 rounded-xl p-2 pt-1 shadow-zinc-900/40 shadow-2xl">
       <header className="flex justify-between items-center p-2">
@@ -107,18 +120,19 @@ export function DatePicker({ handleSelectedDate, initialSelectedDate = '', min, 
             const d = `${date.year}-${month}-${day}`
             const formatedDate = dayjs(d).format('DD/MM/YYYY')
 
-            console.log(dayjs(d).isAfter(max))
+            const isAfterMax = dateIsAfterMax(formatedDate)
+            const isBeforeMin = dateIsBeforeMin(formatedDate)
 
             return (
               <button
-                disabled={false}
+                disabled={isAfterMax || isBeforeMin}
                 key={index}
                 data-is-selected={selectedDate === formatedDate}
                 onClick={() => {
                   setSelectedDate(formatedDate)
                   handleSelectedDate(formatedDate)
                 }}
-                className={`${type === 'current' ? 'text-zinc-300' : 'text-zinc-500/40'} ${true && 'hover:bg-zinc-900/50'} aspect-square size-10 rounded-lg flex items-center justify-center data-[is-selected=true]:bg-zinc-900`}
+                className={`${type === 'current' ? 'text-zinc-300' : 'text-zinc-500/40'} ${isAfterMax ? '' : isBeforeMin ? '' : 'hover:bg-zinc-900/50'} aspect-square size-10 rounded-lg flex items-center justify-center data-[is-selected=true]:bg-zinc-900`}
               >
                 <div key={index}>{day}</div>
               </button>

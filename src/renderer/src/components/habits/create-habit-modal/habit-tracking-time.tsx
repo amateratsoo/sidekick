@@ -16,10 +16,12 @@ const trackingTimes = [
   'Customizado'
 ]
 
+const today = dayjs()
+
 export function HabitTrackingTime() {
   const [trackingTime, setTrackingTime] = useState('Para sempre')
-  const [startDate, setStartDate] = useState(dayjs().format('DD/MM/YYYY'))
-  const [endDate, setEndDate] = useState(dayjs().add(7, 'days').format('DD/MM/YYYY'))
+  const [startDate, setStartDate] = useState(today.format('DD/MM/YYYY'))
+  const [endDate, setEndDate] = useState(today.add(7, 'days').format('DD/MM/YYYY'))
 
   return (
     <div className="mt-5">
